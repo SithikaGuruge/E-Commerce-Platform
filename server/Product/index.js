@@ -3,11 +3,13 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import bodyParser from "body-parser";
 import Product from "./Models/models.js";
+import cors from "cors";
 dotenv.config();
 const mongoUri = process.env.MONGO_URI;
 
 const app = express();
 app.use(bodyParser.json());
+app.use(cors());
 
 mongoose
   .connect(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true })
