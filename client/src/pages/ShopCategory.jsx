@@ -11,15 +11,19 @@ export default function ShopCategory(props) {
     (product) => product.category === props.category
   );
 
-  const productsToShow = clicked ? filteredProducts : filteredProducts.slice(0, 12);
+  const productsToShow = clicked
+    ? filteredProducts
+    : filteredProducts.slice(0, 12);
 
   return (
     <div className="">
       <img src={props.banner} alt={props.category} className="object-cover" />
       <div className="flex text-lg ml-8 my-[80px] justify-between items-center">
         <p>
-          <span className="font-semibold">Showing 1-{clicked ? filteredProducts.length : 12}</span> 
-          {" "}of {filteredProducts.length} results
+          <span className="font-semibold">
+            Showing 1-{clicked ? filteredProducts.length : 12}
+          </span>{" "}
+          of {filteredProducts.length} results
         </p>
         <div className="flex flex-row gap-2 mr-10">
           Sort By <img src={dropdown_icon} alt="sort" />
@@ -30,7 +34,7 @@ export default function ShopCategory(props) {
           {productsToShow.map((product, i) => (
             <Item
               key={i}
-              id={product.id}
+              productId={product._id}
               name={product.name}
               image={product.image}
               new_price={product.new_price}

@@ -13,9 +13,7 @@ export default function Offers() {
             Offers for you
           </h2>
           <p>ONLY ON BEST SELLERS PRODUCTS</p>
-          <button
-            className="rounded-lg bg-[#ff4141] text-white mt-3 cursor-pointer w-24 h-8 justify-center items-center"
-          >
+          <button className="rounded-lg bg-[#ff4141] text-white mt-3 cursor-pointer w-24 h-8 justify-center items-center">
             Check Now
           </button>
         </div>
