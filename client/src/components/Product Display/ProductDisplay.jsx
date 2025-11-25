@@ -1,4 +1,4 @@
-import React from "react";
+import PropTypes from "prop-types";
 import star_icon from "../../assets/star_icon.png";
 import star_dull_icon from "../../assets/star_dull_icon.png";
 export default function ProductDisplay(props) {
@@ -47,7 +47,9 @@ export default function ProductDisplay(props) {
           </div>
         </div>
         <div>
-          <button className="w-auto border my-4 p-2 text-center bg-[#ff4141]">Add to Cart</button>
+          <button className="w-auto border my-4 p-2 text-center bg-[#ff4141]">
+            Add to Cart
+          </button>
           <p>
             <span>Category :</span> Women,T-shirt,Crop Top
           </p>
@@ -59,3 +61,14 @@ export default function ProductDisplay(props) {
     </div>
   );
 }
+
+ProductDisplay.propTypes = {
+  product: PropTypes.shape({
+    image: PropTypes.string,
+    name: PropTypes.string,
+    old_price: PropTypes.number,
+    new_price: PropTypes.number,
+    description: PropTypes.string,
+  }).isRequired,
+  name: PropTypes.string,
+};

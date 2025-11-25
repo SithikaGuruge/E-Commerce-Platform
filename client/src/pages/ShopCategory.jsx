@@ -1,4 +1,5 @@
-import React, { useContext, useState } from "react";
+import { useContext, useState } from "react";
+import PropTypes from "prop-types";
 import { ShopContext } from "../context/ShopContext";
 import dropdown_icon from "../assets/dropdown_icon.png";
 import Item from "../components/Item/item";
@@ -52,3 +53,9 @@ export default function ShopCategory(props) {
     </div>
   );
 }
+
+ShopCategory.propTypes = {
+  category: PropTypes.string.isRequired,
+  banner: PropTypes.string.isRequired,
+};
+

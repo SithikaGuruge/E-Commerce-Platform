@@ -1,5 +1,3 @@
-import React from 'react'
-
 export default function DescriptionBox() {
   return (
     <div className='m-5'><h1>Description</h1>

@@ -1,17 +1,15 @@
-import React from "react";
 import Item from "../Item/item.jsx";
 import { useEffect, useState } from "react";
-import axios from "axios";
-
+import { getAllProducts } from "../../services/index.js";
 export default function NewCollections() {
   const [all_product, setAllProduct] = useState([]);
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get("http://localhost:4002/products");
-        console.log(response.data);
-        setAllProduct(response.data);
+        const response = await getAllProducts();
+        console.log("New Collections products:", response);
+        setAllProduct(response);
       } catch (error) {
         console.error("Error fetching products:", error);
       }

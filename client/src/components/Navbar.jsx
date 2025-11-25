@@ -1,8 +1,7 @@
-import react, { useState } from "react";
+import { useState } from "react";
 import logo from "../assets/logo.png";
 import cart_icon from "../assets/cart_icon.png";
 import { Link } from "react-router-dom";
-import na_dropdown from "../assets/dropdown_icon.png";
 
 export default function Navbar() {
   const [selectedItem, setSelectedItem] = useState("Shop");
@@ -16,9 +15,6 @@ export default function Navbar() {
     Kids: "/kids",
   };
 
-  const dropdown_togle = (e) => {
-    console.log("dropdown_togle");
-  }
   return (
     <div className="flex justify-between p-2 shadow-xl items-center">
       <div className="flex flex-row gap-3 items-center ml-6">
