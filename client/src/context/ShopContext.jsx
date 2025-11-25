@@ -1,7 +1,7 @@
 import { createContext } from "react";
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import axios from "axios";
+import { getAllProducts } from "../services";
 export const ShopContext = createContext(null);
 
 const ShopContextProvider = ({ children }) => {
@@ -10,7 +10,7 @@ const ShopContextProvider = ({ children }) => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get("http://localhost:4002/products");
+        const response = await getAllProducts();
         console.log(response.data);
         setAllProduct(response.data);
       } catch (error) {

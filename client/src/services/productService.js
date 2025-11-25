@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = import.meta.env.VITE_PRODUCT_API_URL || "http://localhost:4002";
+const API_URL = import.meta.env.API_URL || "http://localhost:4002";
 
 // Get all products
 export const getAllProducts = async () => {

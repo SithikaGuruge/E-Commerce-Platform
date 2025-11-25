@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = import.meta.env.VITE_CART_API_URL || "http://localhost:4001";
+const API_URL = import.meta.env.API_URL || "http://localhost:4001";
 
 // Get cart by user ID
 export const getCartByUserId = async (userId) => {
