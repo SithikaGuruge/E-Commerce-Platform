@@ -45,6 +45,6 @@ app.put("/products/:id", async (req, res) => {
   res.json(updatedProduct);
 });
 
-app.listen(PORT, () => {
+app.listen(PORT,'0.0.0.0' , () => {
   console.log(`Product Service is running on port ${PORT}`);
 });
