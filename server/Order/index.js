@@ -72,6 +72,6 @@ app.get("/order/:id", async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
+app.listen(PORT,'0.0.0.0', () => {
   console.log(`Order Service is running on port ${PORT}`);
 });
