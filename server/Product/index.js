@@ -4,8 +4,11 @@ import dotenv from "dotenv";
 import bodyParser from "body-parser";
 import Product from "./Models/models.js";
 import cors from "cors";
+
 dotenv.config();
+
 const mongoUri = process.env.MONGO_URI;
+const PORT = process.env.PORT || 4002;
 
 const app = express();
 app.use(bodyParser.json());
@@ -15,6 +18,11 @@ mongoose
   .connect(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => console.error("Could not connect to MongoDB", err));
+
+// Health check endpoint
+app.get("/health", (req, res) => {
+  res.status(200).json({ status: "UP", service: "product-service" });
+});
 
 app.get("/products", async (req, res) => {
   const products = await Product.find({});
@@ -37,6 +45,6 @@ app.put("/products/:id", async (req, res) => {
   res.json(updatedProduct);
 });
 
-app.listen(4002, () => {
-  console.log("Server is running on port 4002");
+app.listen(PORT, () => {
+  console.log(`Product Service is running on port ${PORT}`);
 });
