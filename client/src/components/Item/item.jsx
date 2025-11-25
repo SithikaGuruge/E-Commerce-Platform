@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import PropTypes from "prop-types";
 export default function Item(props) {
   const navigate = useNavigate();
 
@@ -27,3 +28,11 @@ export default function Item(props) {
     </div>
   );
 }
+
+Item.propTypes = {
+  productId: PropTypes.string.isRequired,
+  image: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  new_price: PropTypes.number.isRequired,
+  old_price: PropTypes.number.isRequired,
+};

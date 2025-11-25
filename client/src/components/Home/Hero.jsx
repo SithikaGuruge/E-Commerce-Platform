@@ -1,4 +1,3 @@
-import React from "react";
 import hand_icon from "../../assets/hand_icon.png";
 import ArrowIcon from "../../assets/arrow.png";
 import Hero_png from "../../assets/hero_image.png";
