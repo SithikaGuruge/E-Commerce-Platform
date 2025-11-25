@@ -1,4 +1,3 @@
-import React from "react";
 import ShopPage from "./pages/Shop.jsx";
 import ShopCategory from "./pages/ShopCategory.jsx";
 import Product from "./pages/Product.jsx";

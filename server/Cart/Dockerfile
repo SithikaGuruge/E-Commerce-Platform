@@ -1,8 +1,11 @@
-FROM node:alpine
+FROM node:alpine:3.21
 
-WORKDIR /server/Order
+WORKDIR /app
 
 COPY package.json ./
-RUN npm install
+RUN npm install --production
 COPY ./ ./
-CMD ["npm", "start"]
+
+EXPOSE 4001
+
+CMD ["node", "index.js"]
