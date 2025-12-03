@@ -3,20 +3,47 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import bodyParser from "body-parser";
 import Product from "./Models/models.js";
+import cors from "cors";
+
 dotenv.config();
+
 const mongoUri = process.env.MONGO_URI;
+const PORT = process.env.PORT || 4002;
 
 const app = express();
 app.use(bodyParser.json());
+app.use(cors());
 
 mongoose
   .connect(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => console.error("Could not connect to MongoDB", err));
 
+// Health check endpoint
+app.get("/health", (req, res) => {
+  res.status(200).json({ status: "UP", service: "product-service" });
+});
+
 app.get("/products", async (req, res) => {
   const products = await Product.find({});
   res.json(products);
+});
+
+app.get("/products/:id", async (req, res) => {
+  try {
+    console.log("Received ID:", req.params.id); // Debug log
+    console.log("ID Type:", typeof req.params.id); // Debug log
+    console.log("Full params:", req.params); // Debug log
+    const product = await Product.findById(req.params.id);
+    console.log("Fetched product:", product); // Debug log
+    if (!product) {
+      return res.status(404).json({ error: "Product not found" });
+    }
+    res.json(product);
+  } catch (error) {
+    console.error("Error fetching product:", error);
+    res.status(500).json({ error: "Failed to fetch product" });
+  }
 });
 
 app.post("/products", async (req, res) => {
@@ -35,6 +62,6 @@ app.put("/products/:id", async (req, res) => {
   res.json(updatedProduct);
 });
 
-app.listen(4002, () => {
-  console.log("Server is running on port 4002");
+app.listen(PORT,'0.0.0.0' , () => {
+  console.log(`Product Service is running on port ${PORT}`);
 });
