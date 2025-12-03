@@ -1,9 +1,9 @@
 import axios from "axios";
 
-const API_URL = import.meta.env.API_URL || "http://localhost:4000";
+const API_URL = import.meta.env.VITE_ORDER_API_URL || "http://localhost:4000";
 
 // Get orders by user ID
-export const getOrdersByUserId = async (userId) => {
+export const getOrdersByUserId = async (userId: string) => {
   try {
     const response = await axios.get(`${API_URL}/order/${userId}`);
     return response.data;
@@ -14,7 +14,7 @@ export const getOrdersByUserId = async (userId) => {
 };
 
 // Create new order
-export const createOrder = async (orderData) => {
+export const createOrder = async (orderData: any) => {
   try {
     const response = await axios.post(`${API_URL}/order`, orderData);
     return response.data;
@@ -25,7 +25,7 @@ export const createOrder = async (orderData) => {
 };
 
 // Update order
-export const updateOrder = async (orderId, orderData) => {
+export const updateOrder = async (orderId: string, orderData: any) => {
   try {
     const response = await axios.put(`${API_URL}/order/${orderId}`, orderData);
     return response.data;
@@ -36,7 +36,7 @@ export const updateOrder = async (orderId, orderData) => {
 };
 
 // Delete order
-export const deleteOrder = async (orderId) => {
+export const deleteOrder = async (orderId: string) => {
   try {
     const response = await axios.delete(`${API_URL}/order/${orderId}`);
     return response.data;
@@ -47,11 +47,11 @@ export const deleteOrder = async (orderId) => {
 };
 
 // Place order from cart
-export const placeOrderFromCart = async (userId, products) => {
+export const placeOrderFromCart = async (userId: string, products: any[]) => {
   try {
     const orderData = {
       userId,
-      Products: products.map((product) => ({
+      Products: products.map((product: any) => ({
         productId: product.productId || product._id,
         quantity: product.quantity || 1,
       })),
@@ -65,7 +65,7 @@ export const placeOrderFromCart = async (userId, products) => {
 };
 
 // Get order by ID
-export const getOrderById = async (orderId) => {
+export const getOrderById = async (orderId: string) => {
   try {
     const response = await axios.get(`${API_URL}/order/${orderId}`);
     return response.data;
@@ -76,7 +76,7 @@ export const getOrderById = async (orderId) => {
 };
 
 // Cancel order
-export const cancelOrder = async (orderId) => {
+export const cancelOrder = async (orderId: string) => {
   try {
     const response = await axios.delete(`${API_URL}/order/${orderId}`);
     return response.data;

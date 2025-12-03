@@ -29,6 +29,23 @@ app.get("/products", async (req, res) => {
   res.json(products);
 });
 
+app.get("/products/:id", async (req, res) => {
+  try {
+    console.log("Received ID:", req.params.id); // Debug log
+    console.log("ID Type:", typeof req.params.id); // Debug log
+    console.log("Full params:", req.params); // Debug log
+    const product = await Product.findById(req.params.id);
+    console.log("Fetched product:", product); // Debug log
+    if (!product) {
+      return res.status(404).json({ error: "Product not found" });
+    }
+    res.json(product);
+  } catch (error) {
+    console.error("Error fetching product:", error);
+    res.status(500).json({ error: "Failed to fetch product" });
+  }
+});
+
 app.post("/products", async (req, res) => {
   const newProduct = new Product(req.body);
   const savedProduct = await newProduct.save();

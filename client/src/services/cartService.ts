@@ -1,9 +1,9 @@
 import axios from "axios";
 
-const API_URL = import.meta.env.API_URL || "http://localhost:4001";
+const API_URL = import.meta.env.VITE_CART_API_URL || "http://localhost:4001";
 
 // Get cart by user ID
-export const getCartByUserId = async (userId) => {
+export const getCartByUserId = async (userId: string) => {
   try {
     const response = await axios.get(`${API_URL}/cart/${userId}`);
     return response.data;
@@ -14,7 +14,7 @@ export const getCartByUserId = async (userId) => {
 };
 
 // Create or add to cart
-export const addToCart = async (cartData) => {
+export const addToCart = async (cartData: any) => {
   try {
     const response = await axios.post(`${API_URL}/cart`, cartData);
     return response.data;
@@ -25,7 +25,7 @@ export const addToCart = async (cartData) => {
 };
 
 // Update cart
-export const updateCart = async (cartId, cartData) => {
+export const updateCart = async (cartId: string, cartData: any) => {
   try {
     const response = await axios.put(`${API_URL}/cart/${cartId}`, cartData);
     return response.data;
@@ -36,7 +36,7 @@ export const updateCart = async (cartId, cartData) => {
 };
 
 // Delete cart
-export const deleteCart = async (cartId) => {
+export const deleteCart = async (cartId: string) => {
   try {
     const response = await axios.delete(`${API_URL}/cart/${cartId}`);
     return response.data;
@@ -47,7 +47,7 @@ export const deleteCart = async (cartId) => {
 };
 
 // Clear user cart
-export const clearUserCart = async (userId) => {
+export const clearUserCart = async (userId: string) => {
   try {
     const cart = await getCartByUserId(userId);
     if (cart && cart.length > 0) {
@@ -60,7 +60,11 @@ export const clearUserCart = async (userId) => {
 };
 
 // Add single item to cart
-export const addItemToCart = async (userId, productId, quantity = 1) => {
+export const addItemToCart = async (
+  userId: string,
+  productId: string,
+  quantity: number = 1
+) => {
   try {
     const cartData = {
       userId,
@@ -80,7 +84,11 @@ export const addItemToCart = async (userId, productId, quantity = 1) => {
 };
 
 // Update item quantity in cart
-export const updateCartItemQuantity = async (cartId, productId, quantity) => {
+export const updateCartItemQuantity = async (
+  cartId: string,
+  productId: string,
+  quantity: number
+) => {
   try {
     const cartData = {
       Products: [

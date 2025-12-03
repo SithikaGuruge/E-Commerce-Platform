@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
-import Item from "../Item/item.jsx";
+import Item from "../Item/item.js";
 import { getAllProducts } from "../../services/index.js";
+import { Product } from "../../types";
+
 export default function Popular() {
-  const [all_product, setAllProduct] = useState([]);
+  const [all_product, setAllProduct] = useState<Product[]>([]);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -25,7 +27,7 @@ export default function Popular() {
         <hr className=" border-2 border-black" />
       </div>
       <div className="mx-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 sm:gap-x-24 lg:gap-x-44 lg:gap-y-5 md:gap-y-5">
-        {all_product.map((product, i) => {
+        {all_product.map((product: Product, i: number) => {
           if (product.category === "women" && i < 5) {
             console.log("product", product);
             return (
@@ -33,9 +35,9 @@ export default function Popular() {
                 key={i}
                 productId={product._id}
                 name={product.name}
-                image={product.image}
-                new_price={product.new_price}
-                old_price={product.old_price}
+                image={product.image || ""}
+                new_price={product.price}
+                old_price={product.price * 1.2}
               />
             );
           }
@@ -49,16 +51,16 @@ export default function Popular() {
         <hr className=" border-2 border-black" />
       </div>
       <div className="mx-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 sm:gap-x-24 lg:gap-x-44 lg:gap-y-5 md:gap-y-5">
-        {all_product.map((product, i) => {
+        {all_product.map((product: Product, i: number) => {
           if (product.category === "men" && i < 17) {
             return (
               <Item
                 key={i}
                 productId={product._id}
                 name={product.name}
-                image={product.image}
-                new_price={product.new_price}
-                old_price={product.old_price}
+                image={product.image || ""}
+                new_price={product.price}
+                old_price={product.price * 1.2}
               />
             );
           }
@@ -72,16 +74,16 @@ export default function Popular() {
         <hr className=" border-2 border-black" />
       </div>
       <div className="mx-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 sm:gap-x-24 lg:gap-x-44 lg:gap-y-5 md:gap-y-5">
-        {all_product.map((product, i) => {
+        {all_product.map((product: Product, i: number) => {
           if (product.category === "kid" && i < 29) {
             return (
               <Item
                 key={i}
                 productId={product._id}
                 name={product.name}
-                image={product.image}
-                new_price={product.new_price}
-                old_price={product.old_price}
+                image={product.image || ""}
+                new_price={product.price}
+                old_price={product.price * 1.2}
               />
             );
           }

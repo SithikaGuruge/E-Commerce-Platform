@@ -1,15 +1,21 @@
 import { useContext, useState } from "react";
-import PropTypes from "prop-types";
 import { ShopContext } from "../context/ShopContext";
 import dropdown_icon from "../assets/dropdown_icon.png";
 import Item from "../components/Item/item";
+import { Product } from "../types";
 
-export default function ShopCategory(props) {
+interface ShopCategoryProps {
+  category: string;
+  banner?: string;
+}
+
+export default function ShopCategory({ category, banner }: ShopCategoryProps) {
   const [clicked, setClicked] = useState(false);
-  const { all_product } = useContext(ShopContext);
+  const context = useContext(ShopContext);
+  const all_product = context?.all_product || [];
 
   const filteredProducts = all_product.filter(
-    (product) => product.category === props.category
+    (product: Product) => product.category === category
   );
 
   const productsToShow = clicked
@@ -18,7 +24,7 @@ export default function ShopCategory(props) {
 
   return (
     <div className="">
-      <img src={props.banner} alt={props.category} className="object-cover" />
+      {banner && <img src={banner} alt={category} className="object-cover" />}
       <div className="flex text-lg ml-8 my-[80px] justify-between items-center">
         <p>
           <span className="font-semibold">
@@ -32,14 +38,14 @@ export default function ShopCategory(props) {
       </div>
       <div className="items-center justify-center">
         <div className="mx-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 sm:gap-x-24 lg:gap-x-40 lg:gap-y-8 md:gap-y-5 sm:gap-y-3">
-          {productsToShow.map((product, i) => (
+          {productsToShow.map((product: Product, i: number) => (
             <Item
               key={i}
               productId={product._id}
               name={product.name}
-              image={product.image}
-              new_price={product.new_price}
-              old_price={product.old_price}
+              image={product.image || ""}
+              new_price={product.price}
+              old_price={product.price * 1.2}
             />
           ))}
         </div>
@@ -53,9 +59,3 @@ export default function ShopCategory(props) {
     </div>
   );
 }
-
-ShopCategory.propTypes = {
-  category: PropTypes.string.isRequired,
-  banner: PropTypes.string.isRequired,
-};
-

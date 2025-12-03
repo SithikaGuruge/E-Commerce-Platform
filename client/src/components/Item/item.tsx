@@ -1,6 +1,14 @@
 import { useNavigate } from "react-router-dom";
-import PropTypes from "prop-types";
-export default function Item(props) {
+
+interface ItemProps {
+  productId: string;
+  image: string;
+  name: string;
+  new_price: number;
+  old_price: number;
+}
+
+export default function Item(props: ItemProps) {
   const navigate = useNavigate();
 
   const clickOnProduct = async () => {
@@ -28,11 +36,3 @@ export default function Item(props) {
     </div>
   );
 }
-
-Item.propTypes = {
-  productId: PropTypes.string.isRequired,
-  image: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  new_price: PropTypes.number.isRequired,
-  old_price: PropTypes.number.isRequired,
-};

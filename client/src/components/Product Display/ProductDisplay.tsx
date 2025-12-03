@@ -1,39 +1,44 @@
-import PropTypes from "prop-types";
 import star_icon from "../../assets/star_icon.png";
 import star_dull_icon from "../../assets/star_dull_icon.png";
-export default function ProductDisplay(props) {
+import { Product } from "../../types";
+
+interface ProductDisplayProps {
+  product: Product;
+}
+
+export default function ProductDisplay({ product }: ProductDisplayProps) {
   return (
     <div className="flex m-6 sm:flex-row flex-col lg:grid lg:grid-cols-2 items-center sm:items-start">
       <div className="flex gap-5">
         <div className="sm:flex flex-col gap-5 hidden ">
-          <img className="w-40" src={props.product.image} alt={props.name} />
-          <img className="w-40" src={props.product.image} alt={props.name} />
-          <img className="w-40" src={props.product.image} alt={props.name} />
-          <img className="w-40" src={props.product.image} alt={props.name} />
+          <img className="w-40" src={product.image} alt={product.name} />
+          <img className="w-40" src={product.image} alt={product.name} />
+          <img className="w-40" src={product.image} alt={product.name} />
+          <img className="w-40" src={product.image} alt={product.name} />
         </div>
         <div>
-          <img className="w-72" src={props.product.image} alt={props.name} />
+          <img className="w-72" src={product.image} alt={product.name} />
         </div>
       </div>
       <div className="m-5 flex flex-col">
         <h1 className="text-l md:text-xl lg:text-4xl font-semibold">
-          {props.product.name}
+          {product.name}
         </h1>
         <div className="flex flex-row items-center mt-2">
-          <img src={star_icon} alt={props.name} />
-          <img src={star_icon} alt={props.name} />
-          <img src={star_icon} alt={props.name} />
-          <img src={star_icon} alt={props.name} />
-          <img src={star_dull_icon} alt={props.name} />
+          <img src={star_icon} alt={product.name} />
+          <img src={star_icon} alt={product.name} />
+          <img src={star_icon} alt={product.name} />
+          <img src={star_icon} alt={product.name} />
+          <img src={star_dull_icon} alt={product.name} />
           <p>122</p>
         </div>
         <div className="flex my-3 gap-3 font-semibold">
-          <p className="line-through">{props.product.old_price}</p>
-          <p className="text-red-500">{props.product.new_price}</p>
+          <p className="line-through">${(product.price * 1.2).toFixed(2)}</p>
+          <p className="text-red-500">${product.price.toFixed(2)}</p>
         </div>
         <div>
           <p className="mt-5 text-[#656565] font-semibold">
-            {props.product.description}
+            {product.description}
           </p>
         </div>
         <div className="flex gap-4 flex-col">
@@ -61,14 +66,3 @@ export default function ProductDisplay(props) {
     </div>
   );
 }
-
-ProductDisplay.propTypes = {
-  product: PropTypes.shape({
-    image: PropTypes.string,
-    name: PropTypes.string,
-    old_price: PropTypes.number,
-    new_price: PropTypes.number,
-    description: PropTypes.string,
-  }).isRequired,
-  name: PropTypes.string,
-};
