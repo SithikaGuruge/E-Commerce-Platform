@@ -1,11 +1,16 @@
-import { createContext } from "react";
+import { createContext, ReactNode } from "react";
 import { useState, useEffect } from "react";
-import PropTypes from "prop-types";
 import { getAllProducts } from "../services";
-export const ShopContext = createContext(null);
+import { Product } from "../types";
 
-const ShopContextProvider = ({ children }) => {
-  const [all_product, setAllProduct] = useState([]);
+interface ShopContextType {
+  all_product: Product[];
+}
+
+export const ShopContext = createContext<ShopContextType | null>(null);
+
+const ShopContextProvider = ({ children }: { children: ReactNode }) => {
+  const [all_product, setAllProduct] = useState<Product[]>([]);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -26,10 +31,6 @@ const ShopContextProvider = ({ children }) => {
   return (
     <ShopContext.Provider value={contextValue}>{children}</ShopContext.Provider>
   );
-};
-
-ShopContextProvider.propTypes = {
-  children: PropTypes.node.isRequired,
 };
 
 export default ShopContextProvider;
