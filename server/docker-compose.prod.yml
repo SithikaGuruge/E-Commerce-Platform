@@ -1,0 +1,102 @@
+# Production Docker Compose Configuration
+version: "3.8"
+
+services:
+  # Product Service
+  product-service:
+    build:
+      context: ./Product
+      dockerfile: Dockerfile
+    container_name: product-service
+    restart: always
+    ports:
+      - "4002:4002"
+    env_file:
+      - ./Product/.env
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    networks:
+      - ecommerce-network
+
+  # Order Service
+  order-service:
+    build:
+      context: ./Order
+      dockerfile: Dockerfile
+    container_name: order-service
+    restart: always
+    ports:
+      - "4000:4000"
+    env_file:
+      - ./Order/.env
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    networks:
+      - ecommerce-network
+
+  # Cart Service
+  cart-service:
+    build:
+      context: ./Cart
+      dockerfile: Dockerfile
+    container_name: cart-service
+    restart: always
+    ports:
+      - "4001:4001"
+    env_file:
+      - ./Cart/.env
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    networks:
+      - ecommerce-network
+
+  # User Service
+  user-service:
+    build:
+      context: ./User
+      dockerfile: Dockerfile
+    container_name: user-service
+    restart: always
+    ports:
+      - "4003:4003"
+    env_file:
+      - ./User/.env
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    networks:
+      - ecommerce-network
+
+  # Nginx API Gateway
+  nginx:
+    image: nginx:alpine
+    container_name: api-gateway
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - product-service
+      - order-service
+      - cart-service
+      - user-service
+    extra_hosts:
+      - "host.docker.internal:host-gateway"  # Allow nginx to access host
+    networks:
+      - ecommerce-network
+
+networks:
+  ecommerce-network:
+    driver: bridge
