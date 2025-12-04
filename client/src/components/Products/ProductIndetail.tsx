@@ -2,11 +2,11 @@ import star_icon from "@/assets/star_icon.png";
 import star_dull_icon from "@/assets/star_dull_icon.png";
 import { Product } from "../../types";
 
-interface ProductDisplayProps {
+interface ProductIndetailProps {
   product: Product;
 }
 
-export default function ProductDisplay({ product }: ProductDisplayProps) {
+export default function ProductIndetail({ product }: ProductIndetailProps) {
   return (
     <div className="flex m-6 sm:flex-row flex-col lg:grid lg:grid-cols-2 items-center sm:items-start">
       <div className="flex gap-5">

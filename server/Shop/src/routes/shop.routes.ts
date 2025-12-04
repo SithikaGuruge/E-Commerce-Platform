@@ -27,17 +27,19 @@ router.post("/", async (req: Request, res: Response) => {
 // Get all shops with optional filters
 router.get("/", async (req: Request, res: Response) => {
   try {
-    const { status, category, ownerId } = req.query;
+    const { status, category, ownerId, search } = req.query;
 
     const filters: {
       status?: ShopStatus;
       category?: ShopCategory;
       ownerId?: string;
+      search?: string;
     } = {};
 
     if (status) filters.status = status as ShopStatus;
     if (category) filters.category = category as ShopCategory;
     if (ownerId) filters.ownerId = ownerId as string;
+    if (search) filters.search = search as string;
 
     const shops = await shopService.getAllShops(filters);
     res.status(200).json({

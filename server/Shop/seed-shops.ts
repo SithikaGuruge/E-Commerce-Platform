@@ -21,22 +21,23 @@ const shopSchema = new mongoose.Schema(
     category: {
       type: String,
       enum: [
-        "ELECTRONICS",
-        "FASHION",
-        "HOME",
-        "SPORTS",
-        "BEAUTY",
-        "BOOKS",
-        "TOYS",
-        "FOOD",
-        "OTHER",
+        "electronics",
+        "fashion",
+        "home_garden",
+        "sports",
+        "books",
+        "toys",
+        "food",
+        "health",
+        "beauty",
+        "other",
       ],
       required: true,
     },
     status: {
       type: String,
-      enum: ["ACTIVE", "INACTIVE", "SUSPENDED", "PENDING"],
-      default: "ACTIVE",
+      enum: ["active", "pending", "suspended", "closed"],
+      default: "active",
     },
     rating: { type: Number, default: 4.5, min: 0, max: 5 },
     totalProducts: { type: Number, default: 0 },
@@ -69,7 +70,7 @@ const sampleShops = [
     name: "TechHub Electronics",
     description:
       "Your one-stop shop for cutting-edge electronics and gadgets. We offer the latest smartphones, laptops, and accessories.",
-    category: "ELECTRONICS",
+    category: "electronics",
     rating: 4.8,
     totalProducts: 150,
     totalOrders: 2500,
@@ -84,14 +85,20 @@ const sampleShops = [
       email: "info@techhub.com",
       phone: "+1-555-0101",
     },
-    logo: "https://via.placeholder.com/200x200?text=TechHub",
-    banner: "https://via.placeholder.com/1200x400?text=TechHub+Electronics",
+    logo: "https://images.unsplash.com/photo-1550009158-9ebf69173e03?w=200&h=200&fit=crop",
+    banner:
+      "https://images.unsplash.com/photo-1498049794561-7780e7231661?w=1200&h=400&fit=crop",
+    socialMedia: {
+      facebook: "https://facebook.com/techhub",
+      instagram: "https://instagram.com/techhub",
+      twitter: "https://twitter.com/techhub",
+    },
   },
   {
     name: "Fashion Forward",
     description:
       "Trendy clothing and accessories for men and women. Stay ahead of the fashion curve with our curated collections.",
-    category: "FASHION",
+    category: "fashion",
     rating: 4.6,
     totalProducts: 300,
     totalOrders: 3200,
@@ -106,14 +113,19 @@ const sampleShops = [
       email: "hello@fashionforward.com",
       phone: "+1-555-0202",
     },
-    logo: "https://via.placeholder.com/200x200?text=Fashion",
-    banner: "https://via.placeholder.com/1200x400?text=Fashion+Forward",
+    logo: "https://images.unsplash.com/photo-1445205170230-053b83016050?w=200&h=200&fit=crop",
+    banner:
+      "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1200&h=400&fit=crop",
+    socialMedia: {
+      facebook: "https://facebook.com/fashionforward",
+      instagram: "https://instagram.com/fashionforward",
+    },
   },
   {
     name: "HomeStyle Living",
     description:
       "Beautiful home decor and furniture to transform your living spaces. Quality products at affordable prices.",
-    category: "HOME",
+    category: "home_garden",
     rating: 4.7,
     totalProducts: 200,
     totalOrders: 1800,
@@ -128,14 +140,15 @@ const sampleShops = [
       email: "support@homestyleliving.com",
       phone: "+1-555-0303",
     },
-    logo: "https://via.placeholder.com/200x200?text=HomeStyle",
-    banner: "https://via.placeholder.com/1200x400?text=HomeStyle+Living",
+    logo: "https://images.unsplash.com/photo-1513694203232-719a280e022f?w=200&h=200&fit=crop",
+    banner:
+      "https://images.unsplash.com/photo-1556911220-bff31c812dba?w=1200&h=400&fit=crop",
   },
   {
     name: "Global Imports",
     description:
       "Premium imported goods from around the world. Discover unique products you won't find anywhere else.",
-    category: "OTHER",
+    category: "other",
     rating: 4.9,
     totalProducts: 180,
     totalOrders: 2100,
@@ -150,8 +163,12 @@ const sampleShops = [
       email: "contact@globalimports.com",
       phone: "+1-555-0404",
     },
-    logo: "https://via.placeholder.com/200x200?text=Global",
-    banner: "https://via.placeholder.com/1200x400?text=Global+Imports",
+    logo: "https://images.unsplash.com/photo-1557821552-17105176677c?w=200&h=200&fit=crop",
+    banner:
+      "https://images.unsplash.com/photo-1578916171728-46686eac8d58?w=1200&h=400&fit=crop",
+    socialMedia: {
+      twitter: "https://twitter.com/globalimports",
+    },
   },
 ];
 

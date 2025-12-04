@@ -1,4 +1,5 @@
 import axios from "axios";
+import { Product } from "@/types";
 
 const API_URL =
   import.meta.env.VITE_PRODUCT_API_URL || "http://localhost:4002/api";
@@ -8,24 +9,54 @@ export interface ProductQueryParams {
   type?: string;
   category?: string;
   limit?: number;
+  page?: number;
+  search?: string;
+  shopId?: string;
 }
 
-// Get all products with optional filters
-export const getAllProducts = async (params?: ProductQueryParams) => {
+export interface PaginatedProductsResponse {
+  success: boolean;
+  data: Product[];
+  pagination: {
+    currentPage: number;
+    totalPages: number;
+    totalItems: number;
+    itemsPerPage: number;
+    hasNextPage: boolean;
+    hasPreviousPage: boolean;
+  };
+}
+
+// Get all products with optional filters and pagination
+export const getAllProducts = async (
+  params?: ProductQueryParams
+): Promise<Product[]> => {
   console.log("API_URL:", API_URL);
   try {
     const queryParams = new URLSearchParams();
 
-    if (params?.type) {
+    if (params?.type && params.type !== "all") {
       queryParams.append("type", params.type);
     }
 
-    if (params?.category) {
+    if (params?.category && params.category !== "all") {
       queryParams.append("category", params.category);
+    }
+
+    if (params?.search) {
+      queryParams.append("search", params.search);
+    }
+
+    if (params?.shopId) {
+      queryParams.append("shopId", params.shopId);
     }
 
     if (params?.limit) {
       queryParams.append("limit", params.limit.toString());
+    }
+
+    if (params?.page) {
+      queryParams.append("page", params.page.toString());
     }
 
     const url = queryParams.toString()
@@ -34,6 +65,49 @@ export const getAllProducts = async (params?: ProductQueryParams) => {
 
     const response = await axios.get(url);
     return response.data.data || [];
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    throw error;
+  }
+};
+
+// Get products with pagination info
+export const getProductsPaginated = async (
+  params?: ProductQueryParams
+): Promise<PaginatedProductsResponse> => {
+  try {
+    const queryParams = new URLSearchParams();
+
+    if (params?.type && params.type !== "all") {
+      queryParams.append("type", params.type);
+    }
+
+    if (params?.category && params.category !== "all") {
+      queryParams.append("category", params.category);
+    }
+
+    if (params?.search) {
+      queryParams.append("search", params.search);
+    }
+
+    if (params?.shopId) {
+      queryParams.append("shopId", params.shopId);
+    }
+
+    if (params?.limit) {
+      queryParams.append("limit", params.limit.toString());
+    }
+
+    if (params?.page) {
+      queryParams.append("page", params.page.toString());
+    }
+
+    const url = queryParams.toString()
+      ? `${API_URL}/products?${queryParams.toString()}`
+      : `${API_URL}/products`;
+
+    const response = await axios.get<PaginatedProductsResponse>(url);
+    return response.data;
   } catch (error) {
     console.error("Error fetching products:", error);
     throw error;
@@ -111,6 +185,24 @@ export const getProductsByType = async (type: string, limit?: number) => {
     return await getAllProducts(params);
   } catch (error) {
     console.error("Error fetching products by type:", error);
+    throw error;
+  }
+};
+
+// Get products by shop ID
+export const getProductsByShopId = async (shopId: string, limit?: number) => {
+  try {
+    const queryParams = new URLSearchParams();
+    queryParams.append("shopId", shopId);
+    if (limit) {
+      queryParams.append("limit", limit.toString());
+    }
+
+    const url = `${API_URL}/products?${queryParams.toString()}`;
+    const response = await axios.get(url);
+    return response.data.data || [];
+  } catch (error) {
+    console.error("Error fetching products by shop:", error);
     throw error;
   }
 };
