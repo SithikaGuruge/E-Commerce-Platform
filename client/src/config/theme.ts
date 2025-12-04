@@ -119,6 +119,25 @@ export const theme = {
       DEFAULT: "rgba(148, 163, 184, 0.3)",
       dark: "rgba(148, 163, 184, 0.5)",
     },
+
+    toast: {
+      success: {
+        background: "#047857",
+        progress: "rgba(255, 255, 255, 0.7)",
+      },
+      error: {
+        background: "#b91c1c",
+        progress: "rgba(255, 255, 255, 0.7)",
+      },
+      info: {
+        background: "#06b6d4",
+        progress: "rgba(255, 255, 255, 0.7)",
+      },
+      warning: {
+        background: "#f59e0b",
+        progress: "rgba(255, 255, 255, 0.7)",
+      },
+    },
   },
 
   gradients: {

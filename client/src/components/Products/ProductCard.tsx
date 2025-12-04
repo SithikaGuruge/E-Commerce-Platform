@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ShoppingCart } from "lucide-react";
 import { theme } from "@/config/theme";
+import { useCart } from "@/context/CartContext";
 
 interface ProductCardProps {
   product: Product;
@@ -11,6 +12,7 @@ interface ProductCardProps {
 
 export function ProductCard({ product }: ProductCardProps) {
   const navigate = useNavigate();
+  const { addToCart } = useCart();
 
   return (
     <div
@@ -79,7 +81,7 @@ export function ProductCard({ product }: ProductCardProps) {
           disabled={product.stock === 0}
           onClick={(e) => {
             e.stopPropagation();
-            // Add to cart logic here
+            addToCart(product, 1);
           }}
         >
           <ShoppingCart className="w-4 h-4 mr-2" />
