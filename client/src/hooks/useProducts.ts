@@ -1,20 +1,21 @@
 import { useState, useEffect } from "react";
 import { Product } from "../types";
 import * as productService from "../services/productService";
+import { ProductQueryParams } from "../services/productService";
 
-export const useProducts = () => {
+export const useProducts = (params?: ProductQueryParams) => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     fetchProducts();
-  }, []);
+  }, [params?.type, params?.category, params?.limit]);
 
   const fetchProducts = async () => {
     try {
       setLoading(true);
-      const data = await productService.getAllProducts();
+      const data = await productService.getAllProducts(params);
       setProducts(data);
       setError(null);
     } catch (err) {

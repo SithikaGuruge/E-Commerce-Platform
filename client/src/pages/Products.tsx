@@ -67,7 +67,10 @@ export default function Products() {
             className="border rounded-lg p-4 hover:shadow-md transition-shadow"
           >
             <div className="flex gap-4">
-              <div className="w-32 h-32 bg-gray-100 rounded flex-shrink-0 flex items-center justify-center">
+              <div
+                className="w-32 h-32 rounded flex-shrink-0 flex items-center justify-center"
+                style={{ background: "rgba(255,255,255,0.05)" }}
+              >
                 {product.image ? (
                   <img
                     src={product.image}
@@ -92,7 +95,7 @@ export default function Products() {
                 </div>
                 <div className="flex items-center gap-4">
                   <span className="text-2xl font-bold">
-                    ${product.price?.toFixed(2) || "0.00"}
+                    ${(product.new_price || product.price || 0).toFixed(2)}
                   </span>
                   {product.stock !== undefined && (
                     <span className="text-sm text-gray-500">

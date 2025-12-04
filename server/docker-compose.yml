@@ -1,25 +1,21 @@
 version: "3.8"
 
 services:
-  # MongoDB Database
-  mongodb:
-    image: mongo:latest
-    container_name: ecommerce-mongodb
+  # Shop Service
+  shop-service:
+    build:
+      context: ./Shop
+      dockerfile: Dockerfile
+    container_name: shop-service
     restart: unless-stopped
     ports:
-      - "27017:27017"
+      - "4001:4001"
     environment:
-      MONGO_INITDB_ROOT_USERNAME: admin
-      MONGO_INITDB_ROOT_PASSWORD: password123
-    volumes:
-      - mongodb_data:/data/db
+      - MONGO_URI=${SHOP_MONGO_URI:-mongodb+srv://sithikaguruge2001:sithika123@cluster0.xvh06.mongodb.net/Shops}
+      - NODE_ENV=production
+      - PORT=4001
     networks:
       - ecommerce-network
-    healthcheck:
-      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
-      interval: 10s
-      timeout: 5s
-      retries: 5
 
   # Product Service
   product-service:
@@ -31,91 +27,11 @@ services:
     ports:
       - "4002:4002"
     environment:
-      - MONGO_URI=mongodb://admin:password123@mongodb:27017/ecommerce?authSource=admin
+      - MONGO_URI=${PRODUCT_MONGO_URI:-mongodb+srv://sithikaguruge2001:sithika123@cluster0.xvh06.mongodb.net/Products}
       - NODE_ENV=production
       - PORT=4002
-    depends_on:
-      mongodb:
-        condition: service_healthy
     networks:
       - ecommerce-network
-    healthcheck:
-      test:
-        [
-          "CMD",
-          "wget",
-          "--quiet",
-          "--tries=1",
-          "--spider",
-          "http://localhost:4002/products",
-        ]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-
-  # Order Service
-  order-service:
-    build:
-      context: ./Order
-      dockerfile: Dockerfile
-    container_name: order-service
-    restart: unless-stopped
-    ports:
-      - "4000:4000"
-    environment:
-      - MONGO_URI=mongodb://admin:password123@mongodb:27017/ecommerce?authSource=admin
-      - NODE_ENV=production
-      - PORT=4000
-    depends_on:
-      mongodb:
-        condition: service_healthy
-    networks:
-      - ecommerce-network
-    healthcheck:
-      test:
-        [
-          "CMD",
-          "wget",
-          "--quiet",
-          "--tries=1",
-          "--spider",
-          "http://localhost:4000/health",
-        ]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-
-  # Cart Service
-  cart-service:
-    build:
-      context: ./Cart
-      dockerfile: Dockerfile
-    container_name: cart-service
-    restart: unless-stopped
-    ports:
-      - "4001:4001"
-    environment:
-      - MONGO_URI=mongodb://admin:password123@mongodb:27017/ecommerce?authSource=admin
-      - NODE_ENV=production
-      - PORT=4001
-    depends_on:
-      mongodb:
-        condition: service_healthy
-    networks:
-      - ecommerce-network
-    healthcheck:
-      test:
-        [
-          "CMD",
-          "wget",
-          "--quiet",
-          "--tries=1",
-          "--spider",
-          "http://localhost:4001/health",
-        ]
-      interval: 30s
-      timeout: 10s
-      retries: 3
 
   # User Service
   user-service:
@@ -127,27 +43,27 @@ services:
     ports:
       - "4003:4003"
     environment:
-      - MONGO_URI=mongodb://admin:password123@mongodb:27017/ecommerce?authSource=admin
+      - MONGO_URI=${USER_MONGO_URI:-mongodb+srv://sithikaguruge2001:sithika123@cluster0.xvh06.mongodb.net/Users}
       - NODE_ENV=production
       - PORT=4003
-    depends_on:
-      mongodb:
-        condition: service_healthy
     networks:
       - ecommerce-network
-    healthcheck:
-      test:
-        [
-          "CMD",
-          "wget",
-          "--quiet",
-          "--tries=1",
-          "--spider",
-          "http://localhost:4003/health",
-        ]
-      interval: 30s
-      timeout: 10s
-      retries: 3
+
+  # Order Service
+  order-service:
+    build:
+      context: ./Order
+      dockerfile: Dockerfile
+    container_name: order-service
+    restart: unless-stopped
+    ports:
+      - "4000:4000"
+    environment:
+      - MONGO_URI=${ORDER_MONGO_URI:-mongodb+srv://sithikaguruge2001:sithika123@cluster0.xvh06.mongodb.net/Orders}
+      - NODE_ENV=production
+      - PORT=4000
+    networks:
+      - ecommerce-network
 
   # Nginx API Gateway (Optional - for routing and load balancing)
   nginx:
@@ -159,17 +75,13 @@ services:
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
     depends_on:
+      - shop-service
       - product-service
-      - order-service
-      - cart-service
       - user-service
+      - order-service
     networks:
       - ecommerce-network
 
 networks:
   ecommerce-network:
     driver: bridge
-
-volumes:
-  mongodb_data:
-    driver: local
