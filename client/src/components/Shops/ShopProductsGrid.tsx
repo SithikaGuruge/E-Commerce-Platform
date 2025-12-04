@@ -189,14 +189,14 @@ export function ShopProductsGrid({ shopId }: ShopProductsGridProps) {
 
       {/* Products Grid */}
       {loading ? (
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {[...Array(PRODUCTS_PER_PAGE)].map((_, i) => (
             <Skeleton key={i} className="h-96 w-full rounded-xl" />
           ))}
         </div>
       ) : products.length > 0 ? (
         <>
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {products.map((product) => (
               <div
                 key={product._id}

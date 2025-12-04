@@ -26,8 +26,8 @@ const menuItems = [
     icon: Home,
   },
   {
-    title: "Shop",
-    url: "/shop",
+    title: "Shops",
+    url: "/shops",
     icon: ShoppingBag,
   },
   {

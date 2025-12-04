@@ -65,7 +65,7 @@ export default function ProductsByTypePage() {
     return (
       <div className="space-y-8 py-8">
         <Skeleton className="h-32 w-full rounded-3xl" />
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {[...Array(8)].map((_, i) => (
             <div key={i} className="space-y-3">
               <Skeleton className="h-64 w-full rounded-xl" />
@@ -125,7 +125,7 @@ export default function ProductsByTypePage() {
 
       {/* Products Grid */}
       {products.length > 0 ? (
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {products.map((product: Product) => (
             <div
               key={product._id}
