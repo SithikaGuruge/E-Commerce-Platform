@@ -9,8 +9,14 @@ export interface Product {
   price?: number; // Alias for backwards compatibility
   category: string;
   image?: string;
-  stock?: number;
+  stock: number;
   type?: ProductType;
+  rating?: number;
+  reviewCount?: number;
+  shopId?: string;
+  sold?: number;
+  specifications?: Record<string, string>;
+  tags?: string[];
   createdAt?: string;
   updatedAt?: string;
 }
