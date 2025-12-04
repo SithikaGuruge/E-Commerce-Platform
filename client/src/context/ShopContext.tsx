@@ -16,8 +16,7 @@ const ShopContextProvider = ({ children }: { children: ReactNode }) => {
     const fetchProducts = async () => {
       try {
         const response = await getAllProducts();
-        console.log(response.data);
-        setAllProduct(response.data);
+        setAllProduct(response);
       } catch (error) {
         console.error("Error fetching products:", error);
       }

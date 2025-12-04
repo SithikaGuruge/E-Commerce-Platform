@@ -97,6 +97,19 @@ export default function Footer() {
               </li>
               <li>
                 <Link
+                  to="/shops"
+                  className="hover:text-white transition-all duration-300 flex items-center gap-2 group"
+                  style={{ color: theme.colors.text.tertiary }}
+                >
+                  <span
+                    className="w-1.5 h-1.5 rounded-full group-hover:w-2 transition-all"
+                    style={{ backgroundColor: theme.colors.primary.DEFAULT }}
+                  ></span>
+                  Shops
+                </Link>
+              </li>
+              <li>
+                <Link
                   to="/categories"
                   className="hover:text-white transition-all duration-300 flex items-center gap-2 group"
                   style={{ color: theme.colors.text.tertiary }}
@@ -118,20 +131,7 @@ export default function Footer() {
                     className="w-1.5 h-1.5 rounded-full group-hover:w-2 transition-all"
                     style={{ backgroundColor: theme.colors.primary.DEFAULT }}
                   ></span>
-                  Special Offers
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/cart"
-                  className="hover:text-white transition-all duration-300 flex items-center gap-2 group"
-                  style={{ color: theme.colors.text.tertiary }}
-                >
-                  <span
-                    className="w-1.5 h-1.5 rounded-full group-hover:w-2 transition-all"
-                    style={{ backgroundColor: theme.colors.primary.DEFAULT }}
-                  ></span>
-                  Shopping Cart
+                  Offers
                 </Link>
               </li>
             </ul>
@@ -143,6 +143,32 @@ export default function Footer() {
             <ul className="space-y-3">
               <li>
                 <Link
+                  to="/categories"
+                  className="hover:text-white transition-all duration-300 flex items-center gap-2 group"
+                  style={{ color: theme.colors.text.tertiary }}
+                >
+                  <span
+                    className="w-1.5 h-1.5 rounded-full group-hover:w-2 transition-all"
+                    style={{ backgroundColor: theme.colors.secondary.DEFAULT }}
+                  ></span>
+                  All Categories
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/offers"
+                  className="hover:text-white transition-all duration-300 flex items-center gap-2 group"
+                  style={{ color: theme.colors.text.tertiary }}
+                >
+                  <span
+                    className="w-1.5 h-1.5 rounded-full group-hover:w-2 transition-all"
+                    style={{ backgroundColor: theme.colors.secondary.DEFAULT }}
+                  ></span>
+                  Special Offers
+                </Link>
+              </li>
+              <li>
+                <Link
                   to="/products/type/trending"
                   className="hover:text-white transition-all duration-300 flex items-center gap-2 group"
                   style={{ color: theme.colors.text.tertiary }}
@@ -151,7 +177,7 @@ export default function Footer() {
                     className="w-1.5 h-1.5 rounded-full group-hover:w-2 transition-all"
                     style={{ backgroundColor: theme.colors.secondary.DEFAULT }}
                   ></span>
-                  Trending Now
+                  Trending
                 </Link>
               </li>
               <li>
@@ -177,46 +203,7 @@ export default function Footer() {
                     className="w-1.5 h-1.5 rounded-full group-hover:w-2 transition-all"
                     style={{ backgroundColor: theme.colors.secondary.DEFAULT }}
                   ></span>
-                  Imported Collection
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/men"
-                  className="hover:text-white transition-all duration-300 flex items-center gap-2 group"
-                  style={{ color: theme.colors.text.tertiary }}
-                >
-                  <span
-                    className="w-1.5 h-1.5 rounded-full group-hover:w-2 transition-all"
-                    style={{ backgroundColor: theme.colors.secondary.DEFAULT }}
-                  ></span>
-                  Men's Fashion
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/women"
-                  className="hover:text-white transition-all duration-300 flex items-center gap-2 group"
-                  style={{ color: theme.colors.text.tertiary }}
-                >
-                  <span
-                    className="w-1.5 h-1.5 rounded-full group-hover:w-2 transition-all"
-                    style={{ backgroundColor: theme.colors.secondary.DEFAULT }}
-                  ></span>
-                  Women's Fashion
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/kids"
-                  className="hover:text-white transition-all duration-300 flex items-center gap-2 group"
-                  style={{ color: theme.colors.text.tertiary }}
-                >
-                  <span
-                    className="w-1.5 h-1.5 rounded-full group-hover:w-2 transition-all"
-                    style={{ backgroundColor: theme.colors.secondary.DEFAULT }}
-                  ></span>
-                  Kids Collection
+                  Imported
                 </Link>
               </li>
             </ul>

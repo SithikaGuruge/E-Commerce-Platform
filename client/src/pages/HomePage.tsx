@@ -60,7 +60,7 @@ export default function HomePage() {
 
   return (
     <div
-      className="space-y-16 py-6"
+      className="space-y-4 py-4"
       style={{ backgroundColor: theme.colors.background.tertiary }}
     >
       {/* Hero Section */}

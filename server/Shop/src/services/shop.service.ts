@@ -32,6 +32,7 @@ export class ShopService {
     status?: ShopStatus;
     category?: ShopCategory;
     ownerId?: string;
+    search?: string;
   }): Promise<ShopResponseDto[]> {
     try {
       const shops = await this.shopRepository.findAll(filters);
