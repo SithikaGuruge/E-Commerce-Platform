@@ -38,7 +38,7 @@ export class ProductService {
     type?: ProductType;
     category?: ProductCategory;
     shopId?: string;
-    limit?: number;
+    search?: string;
   }): Promise<ProductResponseDto[]> {
     try {
       const products = await this.productRepository.findAll(filters);

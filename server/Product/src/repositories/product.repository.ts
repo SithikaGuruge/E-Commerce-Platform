@@ -16,7 +16,7 @@ export class ProductRepository {
     type?: ProductType;
     category?: ProductCategory;
     shopId?: string;
-    limit?: number;
+    search?: string;
   }): Promise<IProduct[]> {
     const query: any = {};
 
@@ -29,14 +29,14 @@ export class ProductRepository {
     if (filters?.shopId) {
       query.shopId = filters.shopId;
     }
-
-    let queryBuilder = Product.find(query).sort({ createdAt: -1 });
-
-    if (filters?.limit) {
-      queryBuilder = queryBuilder.limit(filters.limit);
+    if (filters?.search) {
+      query.$or = [
+        { name: { $regex: filters.search, $options: "i" } },
+        { description: { $regex: filters.search, $options: "i" } },
+      ];
     }
 
-    return await queryBuilder.exec();
+    return await Product.find(query).sort({ createdAt: -1 }).exec();
   }
 
   async update(

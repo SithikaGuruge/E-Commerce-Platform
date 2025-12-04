@@ -1,4 +1,11 @@
-import { Home, ShoppingBag, Grid3x3, Tag, User } from "lucide-react";
+import {
+  Home,
+  Grid3x3,
+  User,
+  ShoppingBag,
+  Tag,
+  Gift,
+} from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import {
   Sidebar,
@@ -36,7 +43,7 @@ const menuItems = [
   {
     title: "Offers",
     url: "/offers",
-    icon: Tag,
+    icon: Gift,
   },
 ];
 

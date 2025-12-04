@@ -16,6 +16,7 @@ export class ShopRepository {
     status?: ShopStatus;
     category?: ShopCategory;
     ownerId?: string;
+    search?: string;
   }): Promise<IShop[]> {
     const query: any = {};
 
@@ -27,6 +28,12 @@ export class ShopRepository {
     }
     if (filters?.ownerId) {
       query.ownerId = filters.ownerId;
+    }
+    if (filters?.search) {
+      query.$or = [
+        { name: { $regex: filters.search, $options: "i" } },
+        { description: { $regex: filters.search, $options: "i" } },
+      ];
     }
 
     return await Shop.find(query).sort({ createdAt: -1 });
