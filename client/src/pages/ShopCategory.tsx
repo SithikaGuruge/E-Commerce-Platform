@@ -44,8 +44,11 @@ export default function ShopCategory({ category, banner }: ShopCategoryProps) {
               productId={product._id}
               name={product.name}
               image={product.image || ""}
-              new_price={product.price}
-              old_price={product.price * 1.2}
+              new_price={product.new_price || product.price || 0}
+              old_price={
+                product.old_price ||
+                (product.new_price || product.price || 0) * 1.2
+              }
             />
           ))}
         </div>

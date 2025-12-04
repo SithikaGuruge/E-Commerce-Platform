@@ -1,11 +1,4 @@
-import {
-  Home,
-  ShoppingBag,
-  Grid3x3,
-  Tag,
-  ShoppingCart,
-  User,
-} from "lucide-react";
+import { Home, ShoppingBag, Grid3x3, Tag, User } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import {
   Sidebar,
@@ -17,8 +10,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { Badge } from "@/components/ui/badge";
-import { useCart } from "@/hooks";
+import { theme } from "@/config/theme";
 
 const menuItems = [
   {
@@ -50,16 +42,25 @@ const menuItems = [
 
 export function AppSidebar() {
   const location = useLocation();
-  const { cart } = useCart();
-
-  const cartItemCount =
-    cart?.Products?.reduce((acc, item) => acc + item.quantity, 0) || 0;
-
   return (
-    <Sidebar>
+    <Sidebar
+      style={{
+        background: theme.gradients.card,
+        borderRight: `1px solid ${theme.colors.primary[400]}40`,
+      }}
+    >
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>E-Commerce</SidebarGroupLabel>
+          <SidebarGroupLabel
+            style={{
+              color: theme.colors.primary[300],
+              fontSize: "0.875rem",
+              fontWeight: "600",
+              letterSpacing: "0.05em",
+            }}
+          >
+            🛍️ BUY EASY
+          </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {menuItems.map((item) => (
@@ -67,6 +68,22 @@ export function AppSidebar() {
                   <SidebarMenuButton
                     asChild
                     isActive={location.pathname === item.url}
+                    style={{
+                      backgroundColor:
+                        location.pathname === item.url
+                          ? `${theme.colors.primary[500]}30`
+                          : "transparent",
+                      color:
+                        location.pathname === item.url
+                          ? theme.colors.primary[300]
+                          : theme.colors.text.secondary,
+                      borderLeft:
+                        location.pathname === item.url
+                          ? `3px solid ${theme.colors.primary[400]}`
+                          : "3px solid transparent",
+                      transition: "all 0.3s ease",
+                    }}
+                    className="hover:scale-105"
                   >
                     <Link to={item.url}>
                       <item.icon />
@@ -76,29 +93,27 @@ export function AppSidebar() {
                 </SidebarMenuItem>
               ))}
 
-              {/* Cart with badge */}
-              <SidebarMenuItem>
-                <SidebarMenuButton
-                  asChild
-                  isActive={location.pathname === "/cart"}
-                >
-                  <Link to="/cart" className="relative">
-                    <ShoppingCart />
-                    <span>Cart</span>
-                    {cartItemCount > 0 && (
-                      <Badge variant="destructive" className="ml-auto">
-                        {cartItemCount}
-                      </Badge>
-                    )}
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-
               {/* User/Account */}
               <SidebarMenuItem>
                 <SidebarMenuButton
                   asChild
                   isActive={location.pathname === "/account"}
+                  style={{
+                    backgroundColor:
+                      location.pathname === "/account"
+                        ? `${theme.colors.primary[500]}30`
+                        : "transparent",
+                    color:
+                      location.pathname === "/account"
+                        ? theme.colors.primary[300]
+                        : theme.colors.text.secondary,
+                    borderLeft:
+                      location.pathname === "/account"
+                        ? `3px solid ${theme.colors.primary[400]}`
+                        : "3px solid transparent",
+                    transition: "all 0.3s ease",
+                  }}
+                  className="hover:scale-105"
                 >
                   <Link to="/account">
                     <User />

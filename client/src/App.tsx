@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { MainLayout } from "./components/MainLayout";
+import HomePage from "./pages/HomePage";
 import ShopPage from "./pages/ShopPage";
 import Products from "./pages/Products";
 import Categories from "./pages/Categories";
@@ -8,6 +9,7 @@ import ShopCategory from "./pages/ShopCategory";
 import Product from "./pages/Product";
 import Cart from "./pages/Cart";
 import LoginSignup from "./pages/LoginSignupPage";
+import ProductsByTypePage from "./pages/ProductsByTypePage";
 import "./App.css";
 
 function App() {
@@ -15,9 +17,10 @@ function App() {
     <Router>
       <MainLayout>
         <Routes>
-          <Route path="/" element={<ShopPage />} />
+          <Route path="/" element={<HomePage />} />
           <Route path="/shop" element={<ShopPage />} />
           <Route path="/products" element={<Products />} />
+          <Route path="/products/type/:type" element={<ProductsByTypePage />} />
           <Route path="/categories" element={<Categories />} />
           <Route path="/offers" element={<Offers />} />
           <Route path="/men" element={<ShopCategory category="men" />} />

@@ -4,10 +4,11 @@ import Breadcrum from "../components/Breadcrum/Breadcrum";
 import ProductDisplay from "../components/Product Display/ProductDisplay";
 import DescriptionBox from "../components/DescriptionBox/DescriptionBox";
 import { getProductById } from "../services";
+import { Product as ProductType } from "../types";
 
 export default function Product() {
   const { id } = useParams(); // Destructure to get just the id
-  const [product, setProduct] = useState(null);
+  const [product, setProduct] = useState<ProductType | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

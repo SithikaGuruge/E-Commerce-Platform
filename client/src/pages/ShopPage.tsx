@@ -47,7 +47,10 @@ export default function ShopPage() {
             key={product._id}
             className="border rounded-lg overflow-hidden hover:shadow-lg transition-shadow"
           >
-            <div className="aspect-square bg-gray-100 flex items-center justify-center">
+            <div
+              className="aspect-square flex items-center justify-center"
+              style={{ background: "rgba(255,255,255,0.05)" }}
+            >
               {product.image ? (
                 <img
                   src={product.image}
@@ -69,7 +72,7 @@ export default function ShopPage() {
               )}
               <div className="flex items-center justify-between">
                 <span className="text-xl font-bold">
-                  ${product.price?.toFixed(2) || "0.00"}
+                  ${(product.new_price || product.price || 0).toFixed(2)}
                 </span>
                 <Badge variant="outline">{product.category}</Badge>
               </div>
