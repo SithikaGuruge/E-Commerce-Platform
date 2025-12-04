@@ -1,3 +1,3 @@
 export * from "./useProducts";
-export * from "./useCart";
+export * from "./useHomeProducts";
 export * from "./useOrders";

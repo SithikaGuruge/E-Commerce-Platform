@@ -1,5 +1,5 @@
-import star_icon from "../../assets/star_icon.png";
-import star_dull_icon from "../../assets/star_dull_icon.png";
+import star_icon from "@/assets/star_icon.png";
+import star_dull_icon from "@/assets/star_dull_icon.png";
 import { Product } from "../../types";
 
 interface ProductDisplayProps {
@@ -33,8 +33,12 @@ export default function ProductDisplay({ product }: ProductDisplayProps) {
           <p>122</p>
         </div>
         <div className="flex my-3 gap-3 font-semibold">
-          <p className="line-through">${(product.price * 1.2).toFixed(2)}</p>
-          <p className="text-red-500">${product.price.toFixed(2)}</p>
+          <p className="line-through">
+            ${(product.old_price || product.new_price * 1.2 || 0).toFixed(2)}
+          </p>
+          <p className="text-red-500">
+            ${(product.new_price || product.price || 0).toFixed(2)}
+          </p>
         </div>
         <div>
           <p className="mt-5 text-[#656565] font-semibold">

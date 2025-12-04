@@ -8,8 +8,9 @@ import { Percent, Tag as TagIcon } from "lucide-react";
 export default function Offers() {
   const { products, loading, error } = useProducts();
 
-  // For demo purposes, show products with price < 50 as "on sale"
-  const offerProducts = products.filter((p: Product) => p.price < 50);
+  const offerProducts = products.filter(
+    (p: Product) => p.price && p.price < 50
+  );
 
   if (loading) {
     return (
@@ -65,7 +66,10 @@ export default function Offers() {
               <TagIcon className="w-3 h-3 mr-1" />
               SALE
             </Badge>
-            <div className="aspect-square bg-gray-100 flex items-center justify-center">
+            <div
+              className="aspect-square flex items-center justify-center"
+              style={{ background: "rgba(255,255,255,0.05)" }}
+            >
               {product.image ? (
                 <img
                   src={product.image}
@@ -87,10 +91,14 @@ export default function Offers() {
               )}
               <div className="flex items-center gap-2">
                 <span className="text-2xl font-bold text-red-600">
-                  ${product.price.toFixed(2)}
+                  ${(product.new_price || product.price || 0).toFixed(2)}
                 </span>
                 <span className="text-sm text-gray-400 line-through">
-                  ${(product.price * 1.3).toFixed(2)}
+                  $
+                  {(
+                    product.old_price ||
+                    (product.new_price || product.price || 0) * 1.3
+                  ).toFixed(2)}
                 </span>
                 <Badge variant="outline" className="ml-auto">
                   Save 30%
