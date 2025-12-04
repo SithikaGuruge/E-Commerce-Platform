@@ -27,25 +27,43 @@ router.post("/", async (req: Request, res: Response) => {
 // Get all products with optional filters
 router.get("/", async (req: Request, res: Response) => {
   try {
-    const { type, category, shopId, limit } = req.query;
+    const { type, category, shopId, limit, page, search } = req.query;
 
     const filters: {
       type?: ProductType;
       category?: ProductCategory;
       shopId?: string;
-      limit?: number;
+      search?: string;
     } = {};
 
     if (type) filters.type = type as ProductType;
     if (category) filters.category = category as ProductCategory;
     if (shopId) filters.shopId = shopId as string;
-    if (limit) filters.limit = parseInt(limit as string);
+    if (search) filters.search = search as string;
 
+    // Get all filtered products (no limit applied at query level)
     const products = await productService.getAllProducts(filters);
+
+    // Calculate pagination
+    const pageNum = page ? parseInt(page as string) : 1;
+    const pageSize = limit ? parseInt(limit as string) : 12;
+    const totalItems = products.length;
+    const totalPages = Math.ceil(totalItems / pageSize);
+    const startIndex = (pageNum - 1) * pageSize;
+    const endIndex = startIndex + pageSize;
+    const paginatedProducts = products.slice(startIndex, endIndex);
+
     res.status(200).json({
       success: true,
-      data: products,
-      count: products.length,
+      data: paginatedProducts,
+      pagination: {
+        currentPage: pageNum,
+        totalPages,
+        totalItems,
+        itemsPerPage: pageSize,
+        hasNextPage: pageNum < totalPages,
+        hasPreviousPage: pageNum > 1,
+      },
     });
   } catch (error) {
     res.status(500).json({

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Breadcrum from "../components/Breadcrum/Breadcrum";
-import ProductDisplay from "../components/Product Display/ProductDisplay";
+import ProductIndetail from "../components/Products/ProductIndetail";
 import DescriptionBox from "../components/DescriptionBox/DescriptionBox";
 import { getProductById } from "../services";
 import { Product as ProductType } from "../types";
@@ -40,7 +40,7 @@ export default function Product() {
   return (
     <div>
       <Breadcrum product={product} />
-      <ProductDisplay product={product} />
+      <ProductIndetail product={product} />
       <DescriptionBox product={product} />
     </div>
   );
