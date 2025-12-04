@@ -1,61 +1,35 @@
-# Production Docker Compose Configuration
 version: "3.8"
 
 services:
+  # Shop Service
+  shop-service:
+    build:
+      context: ./Shop
+      dockerfile: Dockerfile
+    container_name: shop-service
+    restart: unless-stopped
+    ports:
+      - "4001:4001"
+    environment:
+      - MONGO_URI=${SHOP_MONGO_URI:-mongodb+srv://sithikaguruge2001:sithika123@cluster0.xvh06.mongodb.net/Shops}
+      - NODE_ENV=production
+      - PORT=4001
+    networks:
+      - ecommerce-network
+
   # Product Service
   product-service:
     build:
       context: ./Product
       dockerfile: Dockerfile
     container_name: product-service
-    restart: always
+    restart: unless-stopped
     ports:
       - "4002:4002"
-    env_file:
-      - ./Product/.env
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
-    networks:
-      - ecommerce-network
-
-  # Order Service
-  order-service:
-    build:
-      context: ./Order
-      dockerfile: Dockerfile
-    container_name: order-service
-    restart: always
-    ports:
-      - "4000:4000"
-    env_file:
-      - ./Order/.env
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
-    networks:
-      - ecommerce-network
-
-  # Cart Service
-  cart-service:
-    build:
-      context: ./Cart
-      dockerfile: Dockerfile
-    container_name: cart-service
-    restart: always
-    ports:
-      - "4001:4001"
-    env_file:
-      - ./Cart/.env
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
+    environment:
+      - MONGO_URI=${PRODUCT_MONGO_URI:-mongodb+srv://sithikaguruge2001:sithika123@cluster0.xvh06.mongodb.net/Products}
+      - NODE_ENV=production
+      - PORT=4002
     networks:
       - ecommerce-network
 
@@ -65,35 +39,46 @@ services:
       context: ./User
       dockerfile: Dockerfile
     container_name: user-service
-    restart: always
+    restart: unless-stopped
     ports:
       - "4003:4003"
-    env_file:
-      - ./User/.env
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
+    environment:
+      - MONGO_URI=${USER_MONGO_URI:-mongodb+srv://sithikaguruge2001:sithika123@cluster0.xvh06.mongodb.net/Users}
+      - NODE_ENV=production
+      - PORT=4003
     networks:
       - ecommerce-network
 
-  # Nginx API Gateway
+  # Order Service
+  order-service:
+    build:
+      context: ./Order
+      dockerfile: Dockerfile
+    container_name: order-service
+    restart: unless-stopped
+    ports:
+      - "4000:4000"
+    environment:
+      - MONGO_URI=${ORDER_MONGO_URI:-mongodb+srv://sithikaguruge2001:sithika123@cluster0.xvh06.mongodb.net/Orders}
+      - NODE_ENV=production
+      - PORT=4000
+    networks:
+      - ecommerce-network
+
+  # Nginx API Gateway (Optional - for routing and load balancing)
   nginx:
     image: nginx:alpine
     container_name: api-gateway
-    restart: always
+    restart: unless-stopped
     ports:
       - "80:80"
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
     depends_on:
+      - shop-service
       - product-service
-      - order-service
-      - cart-service
       - user-service
-    extra_hosts:
-      - "host.docker.internal:host-gateway"  # Allow nginx to access host
+      - order-service
     networks:
       - ecommerce-network
 

@@ -101,7 +101,10 @@ export default function Categories() {
                 key={product._id}
                 className="border rounded-lg overflow-hidden hover:shadow-lg transition-shadow"
               >
-                <div className="aspect-square bg-gray-100 flex items-center justify-center">
+                <div
+                  className="aspect-square flex items-center justify-center"
+                  style={{ background: "rgba(255,255,255,0.05)" }}
+                >
                   {product.image ? (
                     <img
                       src={product.image}
@@ -115,7 +118,7 @@ export default function Categories() {
                 <div className="p-4 space-y-2">
                   <h3 className="font-semibold line-clamp-1">{product.name}</h3>
                   <p className="text-xl font-bold">
-                    ${product.price.toFixed(2)}
+                    ${(product.new_price || product.price || 0).toFixed(2)}
                   </p>
                 </div>
               </div>
