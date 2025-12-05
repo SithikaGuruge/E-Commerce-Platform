@@ -16,6 +16,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarFooter,
 } from "@/components/ui/sidebar";
 import { theme } from "@/config/theme";
 
@@ -69,7 +70,7 @@ export function AppSidebar() {
             🛍️ BUY EASY
           </SidebarGroupLabel>
           <SidebarGroupContent>
-            <SidebarMenu>
+            <SidebarMenu className="gap-2">
               {menuItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton
@@ -99,39 +100,43 @@ export function AppSidebar() {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
-
-              {/* User/Account */}
-              <SidebarMenuItem>
-                <SidebarMenuButton
-                  asChild
-                  isActive={location.pathname === "/account"}
-                  style={{
-                    backgroundColor:
-                      location.pathname === "/account"
-                        ? `${theme.colors.primary[500]}30`
-                        : "transparent",
-                    color:
-                      location.pathname === "/account"
-                        ? theme.colors.primary[300]
-                        : theme.colors.text.secondary,
-                    borderLeft:
-                      location.pathname === "/account"
-                        ? `3px solid ${theme.colors.primary[400]}`
-                        : "3px solid transparent",
-                    transition: "all 0.3s ease",
-                  }}
-                  className="hover:scale-105"
-                >
-                  <Link to="/account">
-                    <User />
-                    <span>Account</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+
+      {/* Account in Footer */}
+      <SidebarFooter>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              asChild
+              isActive={location.pathname === "/account"}
+              style={{
+                backgroundColor:
+                  location.pathname === "/account"
+                    ? `${theme.colors.primary[500]}30`
+                    : "transparent",
+                color:
+                  location.pathname === "/account"
+                    ? theme.colors.primary[300]
+                    : theme.colors.text.secondary,
+                borderLeft:
+                  location.pathname === "/account"
+                    ? `3px solid ${theme.colors.primary[400]}`
+                    : "3px solid transparent",
+                transition: "all 0.3s ease",
+              }}
+              className="hover:scale-105"
+            >
+              <Link to="/account">
+                <User />
+                <span>Account</span>
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarFooter>
     </Sidebar>
   );
 }

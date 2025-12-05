@@ -18,7 +18,6 @@ export class UserService {
 
   async register(registerData: RegisterDto): Promise<UserResponseDto> {
     try {
-      // Check if user already exists
       const existingUser = await this.userRepository.findByEmail(
         registerData.email
       );
@@ -26,8 +25,6 @@ export class UserService {
         throw new Error("User with this email already exists");
       }
 
-      // In production, hash the password using bcrypt
-      // const hashedPassword = await bcrypt.hash(registerData.password, 10);
       const hashedPassword = registerData.password; // TODO: Implement proper hashing
 
       const userData: CreateUserDto = {
@@ -49,8 +46,6 @@ export class UserService {
         throw new Error("Invalid credentials");
       }
 
-      // In production, compare passwords using bcrypt
-      // const isPasswordValid = await bcrypt.compare(loginData.password, user.password);
       const isPasswordValid = loginData.password === user.password; // TODO: Implement proper comparison
 
       if (!isPasswordValid) {
@@ -141,8 +136,6 @@ export class UserService {
 
   async updatePassword(id: string, newPassword: string): Promise<void> {
     try {
-      // In production, hash the password using bcrypt
-      // const hashedPassword = await bcrypt.hash(newPassword, 10);
       const hashedPassword = newPassword; // TODO: Implement proper hashing
       await this.userRepository.updatePassword(id, hashedPassword);
     } catch (error) {

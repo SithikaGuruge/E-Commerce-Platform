@@ -2,7 +2,9 @@ import express, { Application } from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
+import cookieParser from "cookie-parser";
 import orderRoutes from "./routes/order.routes";
+import cartRoutes from "./routes/cart.routes";
 
 dotenv.config();
 
@@ -10,7 +12,13 @@ const app: Application = express();
 const PORT = process.env.PORT || 4000;
 
 // Middleware
-app.use(cors());
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL || "http://localhost:5173",
+    credentials: true,
+  })
+);
+app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -30,6 +38,7 @@ mongoose
 
 // Routes
 app.use("/api/orders", orderRoutes);
+app.use("/api/cart", cartRoutes);
 
 // Health check
 app.get("/health", (req, res) => {
