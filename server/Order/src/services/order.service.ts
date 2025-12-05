@@ -1,5 +1,10 @@
 import { OrderRepository } from "../repositories/order.repository";
 import { CreateOrderDto, UpdateOrderDto, OrderResponseDto } from "../dtos";
+import {
+  AddToCartDto,
+  UpdateCartItemDto,
+  CartResponseDto,
+} from "../dtos/cart.dto";
 import { OrderStatus, PaymentStatus } from "../enums/order.enum";
 import { IOrder } from "../models/order.model";
 
@@ -133,5 +138,143 @@ export class OrderService {
       createdAt: order.createdAt,
       updatedAt: order.updatedAt,
     };
+  }
+
+  // Cart operations
+  async getCart(userId: string): Promise<CartResponseDto> {
+    try {
+      const cart = await this.orderRepository.findCartByUserId(userId);
+
+      if (!cart) {
+        return {
+          items: [],
+          totalAmount: 0,
+          totalItems: 0,
+        };
+      }
+
+      return {
+        items: cart.products.map((p) => ({
+          productId: p.productId.toString(),
+          quantity: p.quantity,
+          price: p.price,
+          name: p.name,
+          subtotal: p.price * p.quantity,
+        })),
+        totalAmount: cart.totalAmount,
+        totalItems: cart.products.length,
+      };
+    } catch (error) {
+      throw new Error(`Failed to get cart: ${error}`);
+    }
+  }
+
+  async addToCart(
+    userId: string,
+    cartItem: AddToCartDto
+  ): Promise<CartResponseDto> {
+    try {
+      const cart = await this.orderRepository.addToCart(userId, cartItem);
+
+      return {
+        items: cart.products.map((p) => ({
+          productId: p.productId.toString(),
+          quantity: p.quantity,
+          price: p.price,
+          name: p.name,
+          subtotal: p.price * p.quantity,
+        })),
+        totalAmount: cart.totalAmount,
+        totalItems: cart.products.length,
+      };
+    } catch (error) {
+      throw new Error(`Failed to add to cart: ${error}`);
+    }
+  }
+
+  async updateCartItem(
+    userId: string,
+    productId: string,
+    updateData: UpdateCartItemDto
+  ): Promise<CartResponseDto | null> {
+    try {
+      const cart = await this.orderRepository.updateCartItem(
+        userId,
+        productId,
+        updateData
+      );
+
+      if (!cart) {
+        return null;
+      }
+
+      return {
+        items: cart.products.map((p) => ({
+          productId: p.productId.toString(),
+          quantity: p.quantity,
+          price: p.price,
+          name: p.name,
+          subtotal: p.price * p.quantity,
+        })),
+        totalAmount: cart.totalAmount,
+        totalItems: cart.products.length,
+      };
+    } catch (error) {
+      throw new Error(`Failed to update cart item: ${error}`);
+    }
+  }
+
+  async removeCartItem(
+    userId: string,
+    productId: string
+  ): Promise<CartResponseDto> {
+    try {
+      const cart = await this.orderRepository.removeCartItem(userId, productId);
+
+      if (!cart) {
+        return {
+          items: [],
+          totalAmount: 0,
+          totalItems: 0,
+        };
+      }
+
+      return {
+        items: cart.products.map((p) => ({
+          productId: p.productId.toString(),
+          quantity: p.quantity,
+          price: p.price,
+          name: p.name,
+          subtotal: p.price * p.quantity,
+        })),
+        totalAmount: cart.totalAmount,
+        totalItems: cart.products.length,
+      };
+    } catch (error) {
+      throw new Error(`Failed to remove cart item: ${error}`);
+    }
+  }
+
+  async clearCart(userId: string): Promise<void> {
+    try {
+      await this.orderRepository.clearCart(userId);
+    } catch (error) {
+      throw new Error(`Failed to clear cart: ${error}`);
+    }
+  }
+
+  async checkoutCart(
+    userId: string,
+    orderData: UpdateOrderDto
+  ): Promise<OrderResponseDto | null> {
+    try {
+      const order = await this.orderRepository.convertCartToOrder(
+        userId,
+        orderData
+      );
+      return order ? this.mapToResponseDto(order) : null;
+    } catch (error) {
+      throw new Error(`Failed to checkout cart: ${error}`);
+    }
   }
 }

@@ -22,7 +22,6 @@ export const createUser = async (userData: any) => {
   }
 };
 
-// Update user
 export const updateUser = async (userId: string, userData: any) => {
   try {
     const response = await axios.put(`${API_URL}/user/${userId}`, userData);
@@ -33,7 +32,6 @@ export const updateUser = async (userId: string, userData: any) => {
   }
 };
 
-// Delete user
 export const deleteUser = async (userId: string) => {
   try {
     const response = await axios.delete(`${API_URL}/user/${userId}`);
@@ -44,7 +42,6 @@ export const deleteUser = async (userId: string) => {
   }
 };
 
-// Register user
 export const registerUser = async (
   name: string,
   email: string,
@@ -60,7 +57,6 @@ export const registerUser = async (
   }
 };
 
-// Login user (if you add login endpoint later)
 export const loginUser = async (email: string, password: string) => {
   try {
     const response = await axios.post(`${API_URL}/user/login`, {
@@ -74,7 +70,6 @@ export const loginUser = async (email: string, password: string) => {
   }
 };
 
-// Update user profile
 export const updateUserProfile = async (userId: string, profileData: any) => {
   try {
     const response = await axios.put(`${API_URL}/user/${userId}`, profileData);
@@ -85,7 +80,6 @@ export const updateUserProfile = async (userId: string, profileData: any) => {
   }
 };
 
-// Change password
 export const changePassword = async (
   userId: string,
   oldPassword: string,
@@ -103,7 +97,6 @@ export const changePassword = async (
   }
 };
 
-// Get all users (admin)
 export const getAllUsers = async () => {
   try {
     const response = await axios.get(`${API_URL}/users`);

@@ -9,13 +9,24 @@
     "start": "node dist/index.js",
     "watch": "tsc --watch"
   },
-  "keywords": ["user", "authentication", "ecommerce", "microservice"],
+  "keywords": [
+    "user",
+    "authentication",
+    "ecommerce",
+    "microservice"
+  ],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/bcryptjs": "^3.0.0",
+    "@types/cookie-parser": "^1.4.10",
+    "@types/jsonwebtoken": "^9.0.10",
+    "bcryptjs": "^3.0.3",
+    "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.3",
     "mongoose": "^8.5.3"
   },
   "devDependencies": {
