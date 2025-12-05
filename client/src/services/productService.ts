@@ -27,11 +27,9 @@ export interface PaginatedProductsResponse {
   };
 }
 
-// Get all products with optional filters and pagination
 export const getAllProducts = async (
   params?: ProductQueryParams
 ): Promise<Product[]> => {
-  console.log("API_URL:", API_URL);
   try {
     const queryParams = new URLSearchParams();
 
@@ -71,7 +69,6 @@ export const getAllProducts = async (
   }
 };
 
-// Get products with pagination info
 export const getProductsPaginated = async (
   params?: ProductQueryParams
 ): Promise<PaginatedProductsResponse> => {
@@ -114,7 +111,6 @@ export const getProductsPaginated = async (
   }
 };
 
-// Get product by ID
 export const getProductById = async (id: string) => {
   try {
     const response = await axios.get(`${API_URL}/products/${id}`);
@@ -125,7 +121,6 @@ export const getProductById = async (id: string) => {
   }
 };
 
-// Create new product
 export const createProduct = async (productData: any) => {
   try {
     const response = await axios.post(`${API_URL}/products`, productData);
@@ -136,7 +131,6 @@ export const createProduct = async (productData: any) => {
   }
 };
 
-// Update product
 export const updateProduct = async (id: string, productData: any) => {
   try {
     const response = await axios.put(`${API_URL}/products/${id}`, productData);
@@ -147,7 +141,6 @@ export const updateProduct = async (id: string, productData: any) => {
   }
 };
 
-// Delete product
 export const deleteProduct = async (id: string) => {
   try {
     const response = await axios.delete(`${API_URL}/products/${id}`);
@@ -158,7 +151,6 @@ export const deleteProduct = async (id: string) => {
   }
 };
 
-// Get products by category
 export const getProductsByCategory = async (
   category: string,
   limit?: number
@@ -175,7 +167,6 @@ export const getProductsByCategory = async (
   }
 };
 
-// Get products by type
 export const getProductsByType = async (type: string, limit?: number) => {
   try {
     const params: ProductQueryParams = { type };
@@ -189,7 +180,6 @@ export const getProductsByType = async (type: string, limit?: number) => {
   }
 };
 
-// Get products by shop ID
 export const getProductsByShopId = async (shopId: string, limit?: number) => {
   try {
     const queryParams = new URLSearchParams();

@@ -97,15 +97,15 @@ const orderSchema = new Schema<IOrder>(
     paymentMethod: {
       type: String,
       enum: Object.values(PaymentMethod),
-      required: true,
+      required: false, // Not required for cart items
     },
     shippingAddress: {
-      street: { type: String, required: true },
-      city: { type: String, required: true },
-      state: { type: String, required: true },
-      country: { type: String, required: true },
-      zipCode: { type: String, required: true },
-      phone: { type: String, required: true },
+      street: { type: String, required: false },
+      city: { type: String, required: false },
+      state: { type: String, required: false },
+      country: { type: String, required: false },
+      zipCode: { type: String, required: false },
+      phone: { type: String, required: false },
     },
     trackingNumber: {
       type: String,

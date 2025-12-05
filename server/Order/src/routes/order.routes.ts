@@ -56,82 +56,82 @@ router.get("/", async (req: Request, res: Response) => {
 });
 
 // Get order by ID
-router.get("/:id", async (req: Request, res: Response) => {
-  try {
-    const { id } = req.params;
-    const order = await orderService.getOrderById(id);
+// router.get("/:id", async (req: Request, res: Response) => {
+//   try {
+//     const { id } = req.params;
+//     const order = await orderService.getOrderById(id);
 
-    if (!order) {
-      return res.status(404).json({
-        success: false,
-        message: "Order not found",
-      });
-    }
+//     if (!order) {
+//       return res.status(404).json({
+//         success: false,
+//         message: "Order not found",
+//       });
+//     }
 
-    res.status(200).json({
-      success: true,
-      data: order,
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error instanceof Error ? error.message : "Internal server error",
-    });
-  }
-});
+//     res.status(200).json({
+//       success: true,
+//       data: order,
+//     });
+//   } catch (error) {
+//     res.status(500).json({
+//       success: false,
+//       message: error instanceof Error ? error.message : "Internal server error",
+//     });
+//   }
+// });
 
 // Update order
-router.put("/:id", async (req: Request, res: Response) => {
-  try {
-    const { id } = req.params;
-    const updateData: UpdateOrderDto = req.body;
+// router.put("/:id", async (req: Request, res: Response) => {
+//   try {
+//     const { id } = req.params;
+//     const updateData: UpdateOrderDto = req.body;
 
-    const order = await orderService.updateOrder(id, updateData);
+//     const order = await orderService.updateOrder(id, updateData);
 
-    if (!order) {
-      return res.status(404).json({
-        success: false,
-        message: "Order not found",
-      });
-    }
+//     if (!order) {
+//       return res.status(404).json({
+//         success: false,
+//         message: "Order not found",
+//       });
+//     }
 
-    res.status(200).json({
-      success: true,
-      data: order,
-      message: "Order updated successfully",
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error instanceof Error ? error.message : "Internal server error",
-    });
-  }
-});
+//     res.status(200).json({
+//       success: true,
+//       data: order,
+//       message: "Order updated successfully",
+//     });
+//   } catch (error) {
+//     res.status(500).json({
+//       success: false,
+//       message: error instanceof Error ? error.message : "Internal server error",
+//     });
+//   }
+// });
 
 // Delete order
-router.delete("/:id", async (req: Request, res: Response) => {
-  try {
-    const { id } = req.params;
-    const deleted = await orderService.deleteOrder(id);
+// router.delete("/:id", async (req: Request, res: Response) => {
+//   try {
+//     const { id } = req.params;
+//     const deleted = await orderService.deleteOrder(id);
 
-    if (!deleted) {
-      return res.status(404).json({
-        success: false,
-        message: "Order not found",
-      });
-    }
+//     if (!deleted) {
+//       return res.status(404).json({
+//         success: false,
+//         message: "Order not found",
+//       });
+//     }
 
-    res.status(200).json({
-      success: true,
-      message: "Order deleted successfully",
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error instanceof Error ? error.message : "Internal server error",
-    });
-  }
-});
+//     res.status(200).json({
+//       success: true,
+//       message: "Order deleted successfully",
+//     });
+//   } catch (error) {
+//     res.status(500).json({
+//       success: false,
+//       message: error instanceof Error ? error.message : "Internal server error",
+//     });
+//   }
+// });
 
 // Get orders by user
 router.get("/user/:userId", async (req: Request, res: Response) => {

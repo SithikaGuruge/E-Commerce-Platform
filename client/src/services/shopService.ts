@@ -4,7 +4,6 @@ import { Shop } from "@/types";
 const API_URL =
   import.meta.env.VITE_SHOP_API_URL || "http://localhost:4001/api";
 
-// Shop query parameters interface
 export interface ShopQueryParams {
   status?: string;
   category?: string;
@@ -12,7 +11,6 @@ export interface ShopQueryParams {
   search?: string;
 }
 
-// Get all shops with optional filters
 export const getAllShops = async (
   params?: ShopQueryParams
 ): Promise<Shop[]> => {
@@ -47,7 +45,6 @@ export const getAllShops = async (
   }
 };
 
-// Get shop by ID
 export const getShopById = async (id: string): Promise<Shop> => {
   try {
     const response = await axios.get(`${API_URL}/shops/${id}`);
@@ -58,7 +55,6 @@ export const getShopById = async (id: string): Promise<Shop> => {
   }
 };
 
-// Get shops by owner
 export const getShopsByOwner = async (ownerId: string): Promise<Shop[]> => {
   try {
     const response = await axios.get(`${API_URL}/shops/owner/${ownerId}`);
