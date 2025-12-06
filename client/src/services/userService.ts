@@ -1,10 +1,8 @@
-import axios from "axios";
-
-const API_URL = import.meta.env.VITE_USER_API_URL || "http://localhost:4003/api";
+import { userApiClient } from "@/lib/api-client";
 
 export const getUserById = async (userId: string) => {
   try {
-    const response = await axios.get(`${API_URL}/user/${userId}`);
+    const response = await userApiClient.get(`/user/${userId}`);
     return response.data;
   } catch (error) {
     console.error("Error fetching user:", error);
@@ -14,7 +12,7 @@ export const getUserById = async (userId: string) => {
 
 export const createUser = async (userData: any) => {
   try {
-    const response = await axios.post(`${API_URL}/user`, userData);
+    const response = await userApiClient.post(`/user`, userData);
     return response.data;
   } catch (error) {
     console.error("Error creating user:", error);
@@ -24,7 +22,7 @@ export const createUser = async (userData: any) => {
 
 export const updateUser = async (userId: string, userData: any) => {
   try {
-    const response = await axios.put(`${API_URL}/user/${userId}`, userData);
+    const response = await userApiClient.put(`/user/${userId}`, userData);
     return response.data;
   } catch (error) {
     console.error("Error updating user:", error);
@@ -34,7 +32,7 @@ export const updateUser = async (userId: string, userData: any) => {
 
 export const deleteUser = async (userId: string) => {
   try {
-    const response = await axios.delete(`${API_URL}/user/${userId}`);
+    const response = await userApiClient.delete(`/user/${userId}`);
     return response.data;
   } catch (error) {
     console.error("Error deleting user:", error);
@@ -49,7 +47,7 @@ export const registerUser = async (
 ) => {
   try {
     const userData = { name, email, password };
-    const response = await axios.post(`${API_URL}/user`, userData);
+    const response = await userApiClient.post(`/user`, userData);
     return response.data;
   } catch (error) {
     console.error("Error registering user:", error);
@@ -59,7 +57,7 @@ export const registerUser = async (
 
 export const loginUser = async (email: string, password: string) => {
   try {
-    const response = await axios.post(`${API_URL}/user/login`, {
+    const response = await userApiClient.post(`/user/login`, {
       email,
       password,
     });
@@ -72,7 +70,7 @@ export const loginUser = async (email: string, password: string) => {
 
 export const updateUserProfile = async (userId: string, profileData: any) => {
   try {
-    const response = await axios.put(`${API_URL}/user/${userId}`, profileData);
+    const response = await userApiClient.put(`/user/${userId}`, profileData);
     return response.data;
   } catch (error) {
     console.error("Error updating profile:", error);
@@ -86,7 +84,7 @@ export const changePassword = async (
   newPassword: string
 ) => {
   try {
-    const response = await axios.put(`${API_URL}/user/${userId}/password`, {
+    const response = await userApiClient.put(`/user/${userId}/password`, {
       oldPassword,
       newPassword,
     });
@@ -99,7 +97,7 @@ export const changePassword = async (
 
 export const getAllUsers = async () => {
   try {
-    const response = await axios.get(`${API_URL}/users`);
+    const response = await userApiClient.get(`/users`);
     return response.data;
   } catch (error) {
     console.error("Error fetching all users:", error);

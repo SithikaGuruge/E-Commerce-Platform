@@ -1,7 +1,19 @@
 import axios, { AxiosInstance, AxiosError } from "axios";
 import Cookies from "js-cookie";
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:4003";
+export enum ServiceType {
+  ORDER = "ORDER",
+  SHOP = "SHOP",
+  PRODUCT = "PRODUCT",
+  USER = "USER",
+}
+
+const SERVICE_PORTS: Record<ServiceType, string> = {
+  [ServiceType.ORDER]: import.meta.env.VITE_ORDER_API_URL || "http://localhost:4000",
+  [ServiceType.SHOP]: import.meta.env.VITE_SHOP_API_URL || "http://localhost:4001",
+  [ServiceType.PRODUCT]: import.meta.env.VITE_PRODUCT_API_URL || "http://localhost:4002",
+  [ServiceType.USER]: import.meta.env.VITE_USER_API_URL || "http://localhost:4003",
+};
 
 class ApiClient {
   private instance: AxiosInstance;
@@ -11,9 +23,11 @@ class ApiClient {
     reject: (reason?: any) => void;
   }> = [];
 
-  constructor() {
+  constructor(serviceType: ServiceType = ServiceType.USER) {
+    const baseURL = `${SERVICE_PORTS[serviceType]}/api`;
+
     this.instance = axios.create({
-      baseURL: API_BASE_URL,
+      baseURL,
       withCredentials: true,
       headers: {
         "Content-Type": "application/json",
@@ -40,7 +54,13 @@ class ApiClient {
       async (error: AxiosError) => {
         const originalRequest: any = error.config;
 
-        if (error.response?.status === 401 && !originalRequest._retry) {
+        const hadToken = originalRequest.headers?.Authorization;
+
+        if (
+          error.response?.status === 401 &&
+          hadToken &&
+          !originalRequest._retry
+        ) {
           if (this.isRefreshing) {
             return new Promise((resolve, reject) => {
               this.failedQueue.push({ resolve, reject });
@@ -56,11 +76,18 @@ class ApiClient {
           this.isRefreshing = true;
 
           try {
-            const response = await this.instance.post("/api/auth/refresh");
+            const userServiceUrl = `${
+              SERVICE_PORTS[ServiceType.USER]
+            }/api/auth/refresh`;
+            const response = await axios.post(
+              userServiceUrl,
+              {},
+              { withCredentials: true }
+            );
             const { accessToken } = response.data.data;
 
             Cookies.set("accessToken", accessToken, {
-              expires: 1 / 96, // 15 minutes
+              expires: 1 / 96,
               secure: true,
               sameSite: "strict",
             });
@@ -74,7 +101,13 @@ class ApiClient {
             this.failedQueue.forEach(({ reject }) => reject(refreshError));
             this.failedQueue = [];
             Cookies.remove("accessToken");
-            window.location.href = "/login";
+
+            if (
+              !window.location.pathname.includes("/login") &&
+              !window.location.pathname.includes("/signup")
+            ) {
+              window.location.href = "/login";
+            }
             return Promise.reject(refreshError);
           } finally {
             this.isRefreshing = false;
@@ -103,4 +136,12 @@ class ApiClient {
   }
 }
 
-export const apiClient = new ApiClient();
+export const apiClient = new ApiClient(ServiceType.USER);
+export const orderApiClient = new ApiClient(ServiceType.ORDER);
+export const shopApiClient = new ApiClient(ServiceType.SHOP);
+export const productApiClient = new ApiClient(ServiceType.PRODUCT);
+export const userApiClient = new ApiClient(ServiceType.USER);
+
+export const createApiClient = (serviceType: ServiceType) => {
+  return new ApiClient(serviceType);
+};

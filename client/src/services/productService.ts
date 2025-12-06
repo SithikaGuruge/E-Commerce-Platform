@@ -1,10 +1,6 @@
-import axios from "axios";
+import { productApiClient } from "@/lib/api-client";
 import { Product } from "@/types";
 
-const API_URL =
-  import.meta.env.VITE_PRODUCT_API_URL || "http://localhost:4002/api";
-
-// Product query parameters interface
 export interface ProductQueryParams {
   type?: string;
   category?: string;
@@ -58,10 +54,10 @@ export const getAllProducts = async (
     }
 
     const url = queryParams.toString()
-      ? `${API_URL}/products?${queryParams.toString()}`
-      : `${API_URL}/products`;
+      ? `/products?${queryParams.toString()}`
+      : `/products`;
 
-    const response = await axios.get(url);
+    const response = await productApiClient.get(url);
     return response.data.data || [];
   } catch (error) {
     console.error("Error fetching products:", error);
@@ -100,10 +96,10 @@ export const getProductsPaginated = async (
     }
 
     const url = queryParams.toString()
-      ? `${API_URL}/products?${queryParams.toString()}`
-      : `${API_URL}/products`;
+      ? `/products?${queryParams.toString()}`
+      : `/products`;
 
-    const response = await axios.get<PaginatedProductsResponse>(url);
+    const response = await productApiClient.get<PaginatedProductsResponse>(url);
     return response.data;
   } catch (error) {
     console.error("Error fetching products:", error);
@@ -113,7 +109,7 @@ export const getProductsPaginated = async (
 
 export const getProductById = async (id: string) => {
   try {
-    const response = await axios.get(`${API_URL}/products/${id}`);
+    const response = await productApiClient.get(`/products/${id}`);
     return response.data.data;
   } catch (error) {
     console.error("Error fetching product:", error);
@@ -123,7 +119,7 @@ export const getProductById = async (id: string) => {
 
 export const createProduct = async (productData: any) => {
   try {
-    const response = await axios.post(`${API_URL}/products`, productData);
+    const response = await productApiClient.post(`/products`, productData);
     return response.data.data;
   } catch (error) {
     console.error("Error creating product:", error);
@@ -133,7 +129,7 @@ export const createProduct = async (productData: any) => {
 
 export const updateProduct = async (id: string, productData: any) => {
   try {
-    const response = await axios.put(`${API_URL}/products/${id}`, productData);
+    const response = await productApiClient.put(`/products/${id}`, productData);
     return response.data.data;
   } catch (error) {
     console.error("Error updating product:", error);
@@ -143,7 +139,7 @@ export const updateProduct = async (id: string, productData: any) => {
 
 export const deleteProduct = async (id: string) => {
   try {
-    const response = await axios.delete(`${API_URL}/products/${id}`);
+    const response = await productApiClient.delete(`/products/${id}`);
     return response.data;
   } catch (error) {
     console.error("Error deleting product:", error);
@@ -188,8 +184,8 @@ export const getProductsByShopId = async (shopId: string, limit?: number) => {
       queryParams.append("limit", limit.toString());
     }
 
-    const url = `${API_URL}/products?${queryParams.toString()}`;
-    const response = await axios.get(url);
+    const url = `/products?${queryParams.toString()}`;
+    const response = await productApiClient.get(url);
     return response.data.data || [];
   } catch (error) {
     console.error("Error fetching products by shop:", error);

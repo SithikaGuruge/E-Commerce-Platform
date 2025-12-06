@@ -1,8 +1,5 @@
-import axios from "axios";
+import { shopApiClient } from "@/lib/api-client";
 import { Shop } from "@/types";
-
-const API_URL =
-  import.meta.env.VITE_SHOP_API_URL || "http://localhost:4001/api";
 
 export interface ShopQueryParams {
   status?: string;
@@ -34,10 +31,10 @@ export const getAllShops = async (
     }
 
     const url = queryParams.toString()
-      ? `${API_URL}/shops?${queryParams.toString()}`
-      : `${API_URL}/shops`;
+      ? `/shops?${queryParams.toString()}`
+      : `/shops`;
 
-    const response = await axios.get(url);
+    const response = await shopApiClient.get(url);
     return response.data.data || [];
   } catch (error) {
     console.error("Error fetching shops:", error);
@@ -47,7 +44,7 @@ export const getAllShops = async (
 
 export const getShopById = async (id: string): Promise<Shop> => {
   try {
-    const response = await axios.get(`${API_URL}/shops/${id}`);
+    const response = await shopApiClient.get(`/shops/${id}`);
     return response.data.data;
   } catch (error) {
     console.error("Error fetching shop:", error);
@@ -57,7 +54,7 @@ export const getShopById = async (id: string): Promise<Shop> => {
 
 export const getShopsByOwner = async (ownerId: string): Promise<Shop[]> => {
   try {
-    const response = await axios.get(`${API_URL}/shops/owner/${ownerId}`);
+    const response = await shopApiClient.get(`/shops/owner/${ownerId}`);
     return response.data.data || [];
   } catch (error) {
     console.error("Error fetching shops by owner:", error);

@@ -1,4 +1,4 @@
-import { apiClient } from "@/lib/api-client";
+import { orderApiClient } from "@/lib/api-client";
 
 export interface CartItem {
   productId: string;
@@ -26,22 +26,14 @@ export interface UpdateCartItemRequest {
   quantity: number;
 }
 
-const ORDER_SERVICE_URL =
-  import.meta.env.VITE_ORDER_API_URL || "http://localhost:4000/api";
-
 class CartService {
   async getCart(): Promise<CartResponse> {
-    const response = await apiClient.get<CartResponse>(
-      `${ORDER_SERVICE_URL}/cart`
-    );
+    const response = await orderApiClient.get<CartResponse>(`/cart`);
     return response.data;
   }
 
   async addToCart(item: AddToCartRequest): Promise<CartResponse> {
-    const response = await apiClient.post<CartResponse>(
-      `${ORDER_SERVICE_URL}/cart/add`,
-      item
-    );
+    const response = await orderApiClient.post<CartResponse>(`/cart/add`, item);
     return response.data;
   }
 
@@ -49,22 +41,22 @@ class CartService {
     productId: string,
     quantity: number
   ): Promise<CartResponse> {
-    const response = await apiClient.put<CartResponse>(
-      `${ORDER_SERVICE_URL}/cart/update/${productId}`,
+    const response = await orderApiClient.put<CartResponse>(
+      `/cart/update/${productId}`,
       { quantity }
     );
     return response.data;
   }
 
   async removeCartItem(productId: string): Promise<CartResponse> {
-    const response = await apiClient.delete<CartResponse>(
-      `${ORDER_SERVICE_URL}/cart/remove/${productId}`
+    const response = await orderApiClient.delete<CartResponse>(
+      `/cart/remove/${productId}`
     );
     return response.data;
   }
 
   async clearCart(): Promise<void> {
-    await apiClient.delete(`${ORDER_SERVICE_URL}/cart/clear`);
+    await orderApiClient.delete(`/cart/clear`);
   }
 
   async checkoutCart(orderData: {
@@ -78,10 +70,7 @@ class CartService {
       phone: string;
     };
   }): Promise<any> {
-    const response = await apiClient.post(
-      `${ORDER_SERVICE_URL}/cart/checkout`,
-      orderData
-    );
+    const response = await orderApiClient.post(`/cart/checkout`, orderData);
     return response.data;
   }
 }

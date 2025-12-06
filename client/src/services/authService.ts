@@ -1,4 +1,4 @@
-import { apiClient } from "@/lib/api-client";
+import { userApiClient } from "@/lib/api-client";
 import Cookies from "js-cookie";
 
 export interface SignupData {
@@ -32,12 +32,11 @@ export interface AuthResponse {
 
 export const authService = {
   async signup(data: SignupData): Promise<AuthResponse> {
-    const response = await apiClient.post<AuthResponse>(
-      "/api/auth/signup",
+    const response = await userApiClient.post<AuthResponse>(
+      "/auth/signup",
       data
     );
 
-    // Store access token in cookie
     if (response.data.success && response.data.data.accessToken) {
       Cookies.set("accessToken", response.data.data.accessToken, {
         expires: 1 / 96, // 15 minutes
@@ -50,12 +49,11 @@ export const authService = {
   },
 
   async login(data: LoginData): Promise<AuthResponse> {
-    const response = await apiClient.post<AuthResponse>(
-      "/api/auth/login",
+    const response = await userApiClient.post<AuthResponse>(
+      "/auth/login",
       data
     );
 
-    // Store access token in cookie
     if (response.data.success && response.data.data.accessToken) {
       Cookies.set("accessToken", response.data.data.accessToken, {
         expires: 1 / 96, // 15 minutes
@@ -68,19 +66,19 @@ export const authService = {
   },
 
   async logout(): Promise<void> {
-    await apiClient.post("/api/auth/logout");
+    await userApiClient.post("/auth/logout");
     Cookies.remove("accessToken");
   },
 
   async refreshToken(): Promise<{ accessToken: string }> {
-    const response = await apiClient.post<{
+    const response = await userApiClient.post<{
       success: boolean;
       data: { accessToken: string };
-    }>("/api/auth/refresh");
+    }>("/auth/refresh");
 
     if (response.data.success && response.data.data.accessToken) {
       Cookies.set("accessToken", response.data.data.accessToken, {
-        expires: 1 / 96, // 15 minutes
+        expires: 1 / 96,
         secure: true,
         sameSite: "strict",
       });
