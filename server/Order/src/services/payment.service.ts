@@ -10,9 +10,7 @@ export class PaymentService {
   private orderService: OrderService;
 
   constructor() {
-    const stripeKey =
-      process.env.STRIPE_SECRET_KEY ||
-      "REDACTED_STRIPE_KEY";
+    const stripeKey = process.env.STRIPE_SECRET_KEY || "";
     if (!stripeKey) {
       throw new Error(
         "STRIPE_SECRET_KEY is not defined in environment variables",
@@ -175,7 +173,7 @@ export class PaymentService {
       const paymentSuccessEvent: PaymentSuccessEvent = {
         orderId: order._id,
         userId: order.userId,
-        items: order.items.map((item) => ({
+        items: order.products.map((item) => ({
           productId: item.productId,
           quantity: item.quantity,
         })),
