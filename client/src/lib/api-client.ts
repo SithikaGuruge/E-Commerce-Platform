@@ -40,13 +40,15 @@ class ApiClient {
   private setupInterceptors() {
     this.instance.interceptors.request.use(
       (config) => {
-        const token = Cookies.get("accessToken");
+        const session = Cookies.get("session");
+        const token = session ? JSON.parse(session).accessToken : null;
+        console.log("Request Interceptor - Access Token:", token);
         if (token) {
           config.headers.Authorization = `Bearer ${token}`;
         }
         return config;
       },
-      (error) => Promise.reject(error)
+      (error) => Promise.reject(error),
     );
 
     this.instance.interceptors.response.use(
@@ -55,12 +57,14 @@ class ApiClient {
         const originalRequest: any = error.config;
 
         const hadToken = originalRequest.headers?.Authorization;
-
+        console.log("had token:", hadToken);
+        console.log("retry flag:", originalRequest._retry);
         if (
           error.response?.status === 401 &&
           hadToken &&
           !originalRequest._retry
         ) {
+          console.log("Response Interceptor - 401 Unauthorized detected");
           if (this.isRefreshing) {
             return new Promise((resolve, reject) => {
               this.failedQueue.push({ resolve, reject });
@@ -81,12 +85,19 @@ class ApiClient {
             }/api/auth/refresh`;
             const response = await axios.post(
               userServiceUrl,
-              {},
-              { withCredentials: true }
+              {
+                refreshToken: Cookies.get("session")
+                  ? JSON.parse(Cookies.get("session")!).refreshToken
+                  : null,
+              },
+              { withCredentials: true },
             );
+            console.log("Refresh Token Response:", response.data);
             const { accessToken } = response.data.data;
-
-            Cookies.set("accessToken", accessToken, {
+            console.log("Refreshed Access Token:", accessToken);
+            const session = JSON.parse(Cookies.get("session") || "{}");
+            session.accessToken = accessToken;
+            Cookies.set("session", JSON.stringify(session), {
               expires: 1 / 96,
               secure: true,
               sameSite: "strict",
@@ -115,7 +126,7 @@ class ApiClient {
         }
 
         return Promise.reject(error);
-      }
+      },
     );
   }
 

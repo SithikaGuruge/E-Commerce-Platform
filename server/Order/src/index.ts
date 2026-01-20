@@ -3,8 +3,10 @@ import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
+import rabbitmqPublisher from "./events/rabbitmq.publisher";
 import orderRoutes from "./routes/order.routes";
 import cartRoutes from "./routes/cart.routes";
+import paymentRoutes from "./routes/payment.routes";
 
 dotenv.config();
 
@@ -16,9 +18,14 @@ app.use(
   cors({
     origin: process.env.CLIENT_URL || "http://localhost:5173",
     credentials: true,
-  })
+  }),
 );
 app.use(cookieParser());
+
+// Stripe webhook needs raw body, so we handle it before express.json()
+app.use("/api/payment/webhook", express.raw({ type: "application/json" }));
+
+// Regular JSON parsing for other routes
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -36,9 +43,23 @@ mongoose
     process.exit(1);
   });
 
+// Initialize RabbitMQ
+const initializeRabbitMQ = async () => {
+  try {
+    await rabbitmqPublisher.connect();
+    console.log("✅ RabbitMQ initialized");
+  } catch (error) {
+    console.error("❌ Failed to initialize RabbitMQ:", error);
+    // Don't exit - RabbitMQ is optional, service should still work
+  }
+};
+
+initializeRabbitMQ();
+
 // Routes
 app.use("/api/orders", orderRoutes);
 app.use("/api/cart", cartRoutes);
+app.use("/api/payment", paymentRoutes);
 
 // Health check
 app.get("/health", (req, res) => {
@@ -64,15 +85,22 @@ app.use(
     err: Error,
     req: express.Request,
     res: express.Response,
-    next: express.NextFunction
+    next: express.NextFunction,
   ) => {
     console.error("Error:", err.message);
     res.status(500).json({
       success: false,
       message: err.message || "Internal server error",
     });
-  }
+  },
 );
+
+// Graceful shutdown
+process.on("SIGINT", async () => {
+  console.log("Shutting down gracefully...");
+  await rabbitmqPublisher.disconnect();
+  process.exit(0);
+});
 
 // Start server
 app.listen(PORT, () => {

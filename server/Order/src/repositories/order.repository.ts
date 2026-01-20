@@ -11,10 +11,7 @@ export class OrderRepository {
   }
 
   async findById(id: string): Promise<IOrder | null> {
-    return await Order.findById(id)
-      .populate("userId", "name email")
-      .populate("shopId", "name logo")
-      .populate("products.productId", "name image");
+    return await Order.findById(id);
   }
 
   async findAll(filters?: {
@@ -39,9 +36,6 @@ export class OrderRepository {
     }
 
     return await Order.find(query)
-      .populate("userId", "name email")
-      .populate("shopId", "name logo")
-      .populate("products.productId", "name image")
       .sort({ placedDate: -1 });
   }
 
@@ -57,10 +51,7 @@ export class OrderRepository {
       updateFields.deliveredDate = new Date();
     }
 
-    return await Order.findByIdAndUpdate(id, updateFields, { new: true })
-      .populate("userId", "name email")
-      .populate("shopId", "name logo")
-      .populate("products.productId", "name image");
+    return await Order.findByIdAndUpdate(id, updateFields, { new: true });
   }
 
   async delete(id: string): Promise<IOrder | null> {
@@ -69,15 +60,11 @@ export class OrderRepository {
 
   async findByUserId(userId: string): Promise<IOrder[]> {
     return await Order.find({ userId })
-      .populate("shopId", "name logo")
-      .populate("products.productId", "name image")
       .sort({ placedDate: -1 });
   }
 
   async findByShopId(shopId: string): Promise<IOrder[]> {
     return await Order.find({ shopId })
-      .populate("userId", "name email")
-      .populate("products.productId", "name image")
       .sort({ placedDate: -1 });
   }
 
@@ -290,9 +277,6 @@ export class OrderRepository {
       confirmedDate: new Date(),
     };
 
-    return await Order.findByIdAndUpdate(cart._id, updateFields, { new: true })
-      .populate("userId", "name email")
-      .populate("shopId", "name logo")
-      .populate("products.productId", "name image");
+    return await Order.findByIdAndUpdate(cart._id, updateFields, { new: true });
   }
 }

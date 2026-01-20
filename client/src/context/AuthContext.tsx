@@ -29,15 +29,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Check if user is authenticated on mount
     const checkAuth = () => {
       const isAuth = authService.isAuthenticated();
       if (!isAuth) {
         setUser(null);
       }
+      setUser(authService.getCurrentUser());
       setIsLoading(false);
     };
-
     checkAuth();
   }, []);
 

@@ -1,6 +1,12 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { theme } from "@/config/theme";
 import { Button } from "@/components/ui/button";
-import { CreditCard, Package } from "lucide-react";
+import { CreditCard, Package, Loader2 } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
+import { useCart } from "@/context/CartContext";
+import { orderApiClient } from "@/lib/api-client";
+import { showErrorToast, showSuccessToast } from "@/utils/toast";
 
 interface OrderSummaryProps {
   itemCount: number;
@@ -17,6 +23,93 @@ export default function OrderSummary({
   tax,
   total,
 }: OrderSummaryProps) {
+  const navigate = useNavigate();
+  const { user, isAuthenticated } = useAuth();
+  const { cartItems } = useCart();
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  const handleCheckout = async () => {
+    if (!isAuthenticated) {
+      showErrorToast("Please login to proceed with checkout");
+      navigate("/login");
+      return;
+    }
+
+    if (cartItems.length === 0) {
+      showErrorToast("Your cart is empty");
+      return;
+    }
+
+    try {
+      setIsProcessing(true);
+
+      // Group cart items by shop (using product's shop info if available)
+      const itemsByShop = cartItems.reduce(
+        (acc, item) => {
+          const shopId = (item.product as any).shopId || "default-shop";
+          if (!acc[shopId]) {
+            acc[shopId] = [];
+          }
+          acc[shopId].push(item);
+          return acc;
+        },
+        {} as Record<string, typeof cartItems>,
+      );
+
+      // Create orders for each shop
+      const orderPromises = Object.entries(itemsByShop).map(
+        async ([shopId, items]) => {
+          const orderData = {
+            userId: user!.id,
+            shopId: shopId,
+            products: items.map((item) => ({
+              productId: item.product._id,
+              quantity: item.quantity,
+              price: item.product.new_price || item.product.price || 0,
+              name: item.product.name,
+            })),
+            totalAmount: items.reduce(
+              (sum, item) =>
+                sum +
+                (item.product.new_price || item.product.price || 0) *
+                  item.quantity,
+              0,
+            ),
+            shippingAddress: {
+              street: "123 Main St", // TODO: Get from user profile or form
+              city: "San Francisco",
+              state: "CA",
+              country: "USA",
+              zipCode: "94102",
+              phone: user?.contactNumber || "1234567890",
+            },
+          };
+
+          return orderApiClient.post("/orders", orderData);
+        },
+      );
+
+      const orders = await Promise.all(orderPromises);
+
+      // For simplicity, use the first order for payment
+      // In production, you might want to handle multiple orders differently
+      if (orders.length > 0 && orders[0].data.success) {
+        const orderId = orders[0].data.data._id;
+        showSuccessToast("Order created successfully!");
+
+        // Navigate to checkout with orderId
+        navigate(`/checkout?orderId=${orderId}`);
+      } else {
+        throw new Error("Failed to create order");
+      }
+    } catch (error) {
+      console.error("Checkout error:", error);
+      showErrorToast("Failed to proceed with checkout");
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
   return (
     <div className="lg:col-span-1">
       <div
@@ -110,14 +203,25 @@ export default function OrderSummary({
 
           {/* Checkout Button */}
           <Button
+            onClick={handleCheckout}
+            disabled={isProcessing}
             className="w-full py-6 text-lg font-semibold"
             style={{
               backgroundColor: theme.colors.primary.DEFAULT,
               color: "white",
             }}
           >
-            <CreditCard className="w-5 h-5 mr-2" />
-            Proceed to Checkout
+            {isProcessing ? (
+              <>
+                <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                Processing...
+              </>
+            ) : (
+              <>
+                <CreditCard className="w-5 h-5 mr-2" />
+                Proceed to Checkout
+              </>
+            )}
           </Button>
 
           {/* Accepted Payments */}

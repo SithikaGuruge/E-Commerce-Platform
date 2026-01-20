@@ -3,7 +3,6 @@ import jwt, { SignOptions } from "jsonwebtoken";
 import { AuthRepository } from "../repositories/auth.repository";
 import { SignupDto, LoginDto, AuthResponseDto } from "../dtos/auth.dto";
 import { IUser } from "../models/user.model";
-import { UserRole, UserStatus } from "../enums/user.enum";
 
 export class AuthService {
   private authRepository: AuthRepository;
@@ -20,7 +19,7 @@ export class AuthService {
     this.refreshTokenSecret =
       process.env.REFRESH_TOKEN_SECRET ||
       "ecommerce-refresh-secret-2024-production-key";
-    this.accessTokenExpiry = process.env.ACCESS_TOKEN_EXPIRY || "15m";
+    this.accessTokenExpiry = process.env.ACCESS_TOKEN_EXPIRY || "7d";
     this.refreshTokenExpiry = process.env.REFRESH_TOKEN_EXPIRY || "7d";
   }
 
@@ -72,9 +71,11 @@ export class AuthService {
     accessToken: string;
     refreshToken: string;
   }> {
+    console.log("Refreshing access token with refresh token:", refreshToken);
     let payload: any;
     try {
       payload = jwt.verify(refreshToken, this.refreshTokenSecret);
+      console.log("Refresh token payload:", payload);
     } catch (error) {
       throw new Error("Invalid refresh token");
     }
@@ -96,10 +97,14 @@ export class AuthService {
       throw new Error("User not found");
     }
 
-    await this.authRepository.deleteRefreshToken(refreshToken);
+    // await this.authRepository.deleteRefreshToken(refreshToken);
 
     const tokens = await this.generateTokens(user);
-
+    await this.authRepository.updateRefreshToken(
+      refreshToken,
+      tokens.refreshToken,
+      new Date(Date.now() + this.refreshTokenExpiry)
+    );
     return tokens;
   }
 
@@ -123,7 +128,7 @@ export class AuthService {
       email: user.email,
       role: user.role,
     };
-
+    console.log("expiry:", this.accessTokenExpiry);
     const accessToken = jwt.sign(payload, this.accessTokenSecret, {
       expiresIn: this.accessTokenExpiry,
     } as SignOptions);
@@ -133,15 +138,15 @@ export class AuthService {
       this.refreshTokenSecret,
       {
         expiresIn: this.refreshTokenExpiry,
-      } as SignOptions
+      } as SignOptions,
     );
 
     const expiresAt = new Date();
-    expiresAt.setDate(expiresAt.getDate() + 7); // 7 days
+    expiresAt.setMinutes(expiresAt.getMinutes() + 7 * 24 * 60); // 7 days
     await this.authRepository.saveRefreshToken(
       user._id,
       refreshToken,
-      expiresAt
+      expiresAt,
     );
 
     return { accessToken, refreshToken };

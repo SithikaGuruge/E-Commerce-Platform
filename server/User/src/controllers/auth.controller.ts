@@ -12,18 +12,12 @@ export class AuthController {
     try {
       const authResponse = await this.authService.signup(req.body);
 
-      res.cookie("refreshToken", authResponse.refreshToken, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "strict",
-        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-      });
-
       res.status(201).json({
         success: true,
         data: {
           user: authResponse.user,
           accessToken: authResponse.accessToken,
+          refreshToken: authResponse.refreshToken,
         },
       });
     } catch (error: any) {
@@ -38,18 +32,12 @@ export class AuthController {
     try {
       const authResponse = await this.authService.login(req.body);
 
-      res.cookie("refreshToken", authResponse.refreshToken, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "strict",
-        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-      });
-
       res.status(200).json({
         success: true,
         data: {
           user: authResponse.user,
           accessToken: authResponse.accessToken,
+          refreshToken: authResponse.refreshToken,
         },
       });
     } catch (error: any) {
@@ -96,14 +84,13 @@ export class AuthController {
 
   logout = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const refreshToken = req.cookies.refreshToken;
+      const refreshToken = req.body.refreshToken;
+      console.log("Logout - Refresh Token:", refreshToken);
 
       if (refreshToken) {
         await this.authService.logout(refreshToken);
       }
-
-      res.clearCookie("refreshToken");
-
+      await this.authService.logout(refreshToken);
       res.status(200).json({
         success: true,
         message: "Logged out successfully",

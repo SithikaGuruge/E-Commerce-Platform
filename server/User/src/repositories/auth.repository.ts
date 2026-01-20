@@ -24,7 +24,7 @@ export class AuthRepository {
   async saveRefreshToken(
     userId: Types.ObjectId,
     token: string,
-    expiresAt: Date
+    expiresAt: Date,
   ): Promise<IRefreshToken> {
     const refreshToken = new RefreshToken({
       userId,
@@ -40,6 +40,18 @@ export class AuthRepository {
 
   async deleteRefreshToken(token: string): Promise<void> {
     await RefreshToken.deleteOne({ token });
+  }
+
+  async updateRefreshToken(
+    oldToken: string,
+    newToken: string,
+    newExpiry: Date,
+  ): Promise<IRefreshToken | null> {
+    return await RefreshToken.findOneAndUpdate(
+      { token: oldToken },
+      { token: newToken, expiresAt: newExpiry },
+      { new: true },
+    );
   }
 
   async deleteUserRefreshTokens(userId: Types.ObjectId): Promise<void> {

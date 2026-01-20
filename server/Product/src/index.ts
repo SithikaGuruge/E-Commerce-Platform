@@ -2,6 +2,7 @@ import express, { Application } from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
+import rabbitmqConsumer from "./events/rabbitmq.consumer";
 import productRoutes from "./routes/product.routes";
 
 dotenv.config();
@@ -32,6 +33,19 @@ mongoose
     console.error("❌ MongoDB connection error:", error);
     process.exit(1);
   });
+
+// Initialize RabbitMQ Consumer
+const initializeRabbitMQ = async () => {
+  try {
+    await rabbitmqConsumer.connect();
+    console.log("✅ RabbitMQ Consumer initialized");
+  } catch (error) {
+    console.error("❌ Failed to initialize RabbitMQ Consumer:", error);
+    // Don't exit - RabbitMQ is optional, service should still work
+  }
+};
+
+initializeRabbitMQ();
 
 // Routes
 app.use("/api/products", productRoutes);
@@ -69,6 +83,13 @@ app.use(
     });
   }
 );
+
+// Graceful shutdown
+process.on("SIGINT", async () => {
+  console.log("Shutting down gracefully...");
+  await rabbitmqConsumer.disconnect();
+  process.exit(0);
+});
 
 // Start server
 app.listen(PORT, () => {

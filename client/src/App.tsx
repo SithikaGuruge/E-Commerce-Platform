@@ -14,6 +14,8 @@ import AccountPage from "./pages/AccountPage";
 import ProductsByTypePage from "./pages/ProductsByTypePage";
 import ShopsPage from "./pages/ShopsPage";
 import ShopDetailPage from "./pages/ShopDetailPage";
+import CheckoutPage from "./pages/CheckoutPage";
+import PaymentSuccessPage from "./pages/PaymentSuccessPage";
 import "./App.css";
 
 function App() {
@@ -36,6 +38,8 @@ function App() {
               <Route path="/offers" element={<Offers />} />
               <Route path="/product/:id" element={<Product />} />
               <Route path="/cart" element={<CartPage />} />
+              <Route path="/checkout" element={<CheckoutPage />} />
+              <Route path="/payment-success" element={<PaymentSuccessPage />} />
               <Route path="/login" element={<LoginSignup />} />
               <Route path="/account" element={<AccountPage />} />
             </Routes>

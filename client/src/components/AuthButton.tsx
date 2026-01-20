@@ -16,6 +16,7 @@ export function AuthButton() {
       // Error is handled in AuthContext
     }
   };
+  console.log("AuthButton - isAuthenticated:", isAuthenticated, "user:", user);
 
   if (isAuthenticated && user) {
     return (

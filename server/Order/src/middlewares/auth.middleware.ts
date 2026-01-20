@@ -21,7 +21,7 @@ export const authMiddleware = async (
 ): Promise<void> => {
   try {
     // Get token from cookie
-    const token = req.cookies?.accessToken;
+    const token = req.cookies?.session ? JSON.parse(req.cookies.session).accessToken : null;
 
     if (!token) {
       res.status(401).json({ message: "Access token not found" });

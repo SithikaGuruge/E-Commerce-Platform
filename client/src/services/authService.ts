@@ -27,6 +27,7 @@ export interface AuthResponse {
   data: {
     user: User;
     accessToken: string;
+    refreshToken: string;
   };
 }
 
@@ -34,11 +35,20 @@ export const authService = {
   async signup(data: SignupData): Promise<AuthResponse> {
     const response = await userApiClient.post<AuthResponse>(
       "/auth/signup",
-      data
+      data,
     );
 
-    if (response.data.success && response.data.data.accessToken) {
-      Cookies.set("accessToken", response.data.data.accessToken, {
+    if (
+      response.data.success &&
+      response.data.data.accessToken &&
+      response.data.data.refreshToken
+    ) {
+      const session = {
+        accessToken: response.data.data.accessToken,
+        refreshToken: response.data.data.refreshToken,
+        user: response.data.data.user,
+      };
+      Cookies.set("session", JSON.stringify(session), {
         expires: 1 / 96, // 15 minutes
         secure: true,
         sameSite: "strict",
@@ -51,11 +61,19 @@ export const authService = {
   async login(data: LoginData): Promise<AuthResponse> {
     const response = await userApiClient.post<AuthResponse>(
       "/auth/login",
-      data
+      data,
     );
-
-    if (response.data.success && response.data.data.accessToken) {
-      Cookies.set("accessToken", response.data.data.accessToken, {
+    if (
+      response.data.success &&
+      response.data.data.accessToken &&
+      response.data.data.refreshToken
+    ) {
+      const session = {
+        accessToken: response.data.data.accessToken,
+        refreshToken: response.data.data.refreshToken,
+        user: response.data.data.user,
+      };
+      Cookies.set("session", JSON.stringify(session), {
         expires: 1 / 96, // 15 minutes
         secure: true,
         sameSite: "strict",
@@ -66,8 +84,12 @@ export const authService = {
   },
 
   async logout(): Promise<void> {
-    await userApiClient.post("/auth/logout");
-    Cookies.remove("accessToken");
+    await userApiClient.post("/auth/logout", {
+      refreshToken: Cookies.get("session")
+        ? JSON.parse(Cookies.get("session")!).refreshToken
+        : null,
+    });
+    Cookies.remove("session");
   },
 
   async refreshToken(): Promise<{ accessToken: string }> {
@@ -93,5 +115,13 @@ export const authService = {
 
   isAuthenticated(): boolean {
     return !!Cookies.get("accessToken");
+  },
+  getCurrentUser(): User | null {
+    const sessionCookie = Cookies.get("session");
+    if (sessionCookie) {
+      const session = JSON.parse(sessionCookie);
+      return session.user as User;
+    }
+    return null;
   },
 };
